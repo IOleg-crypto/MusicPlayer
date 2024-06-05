@@ -9,6 +9,7 @@ namespace MusicPlayer {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using namespace System::Media;
+	using namespace System::IO;
 
 	/// <summary>
 	/// Summary for MyForm
@@ -35,16 +36,23 @@ namespace MusicPlayer {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Label^ label1;
+
 	protected:
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
+	private: System::Windows::Forms::ContextMenuStrip^ contextMenuStrip1;
+	private: System::Windows::Forms::MenuStrip^ menuStrip1;
+	private: System::Windows::Forms::ToolStripMenuItem^ menuToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ openFileToolStripMenuItem;
+	private: System::Windows::Forms::TextBox^ textBox1;
+
+	private: System::ComponentModel::IContainer^ components;
 
 	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -53,20 +61,16 @@ namespace MusicPlayer {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->components = (gcnew System::ComponentModel::Container());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->contextMenuStrip1 = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
+			this->menuToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->openFileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
-			// 
-			// label1
-			// 
-			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(232, 149);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(44, 16);
-			this->label1->TabIndex = 0;
-			this->label1->Text = L"label1";
-			this->label1->Click += gcnew System::EventHandler(this, &MyForm::label1_Click);
 			// 
 			// button1
 			// 
@@ -82,15 +86,57 @@ namespace MusicPlayer {
 			// 
 			this->openFileDialog1->FileName = L"openFileDialog1";
 			// 
+			// contextMenuStrip1
+			// 
+			this->contextMenuStrip1->ImageScalingSize = System::Drawing::Size(20, 20);
+			this->contextMenuStrip1->Name = L"contextMenuStrip1";
+			this->contextMenuStrip1->Size = System::Drawing::Size(61, 4);
+			// 
+			// menuStrip1
+			// 
+			this->menuStrip1->ImageScalingSize = System::Drawing::Size(20, 20);
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->menuToolStripMenuItem });
+			this->menuStrip1->Location = System::Drawing::Point(0, 0);
+			this->menuStrip1->Name = L"menuStrip1";
+			this->menuStrip1->Size = System::Drawing::Size(768, 28);
+			this->menuStrip1->TabIndex = 3;
+			this->menuStrip1->Text = L"menuStrip1";
+			// 
+			// menuToolStripMenuItem
+			// 
+			this->menuToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->openFileToolStripMenuItem });
+			this->menuToolStripMenuItem->Name = L"menuToolStripMenuItem";
+			this->menuToolStripMenuItem->Size = System::Drawing::Size(60, 24);
+			this->menuToolStripMenuItem->Text = L"Menu";
+			// 
+			// openFileToolStripMenuItem
+			// 
+			this->openFileToolStripMenuItem->Name = L"openFileToolStripMenuItem";
+			this->openFileToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::U));
+			this->openFileToolStripMenuItem->Size = System::Drawing::Size(207, 26);
+			this->openFileToolStripMenuItem->Text = L"Open File";
+			this->openFileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::openFileToolStripMenuItem_Click);
+			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(58, 194);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(676, 22);
+			this->textBox1->TabIndex = 4;
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(768, 507);
+			this->Controls->Add(this->textBox1);
+			this->Controls->Add(this->menuStrip1);
 			this->Controls->Add(this->button1);
-			this->Controls->Add(this->label1);
+			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MyForm";
 			this->Text = L"MusicPlayer";
+			this->menuStrip1->ResumeLayout(false);
+			this->menuStrip1->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -99,6 +145,31 @@ namespace MusicPlayer {
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+		SoundPlayer^ sound = gcnew SoundPlayer;
+		sound->SoundLocation = textBox1->Text;
+		sound->Load();
+		sound->Play();
 	}
-	};
+	private: System::Void openFileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		Stream^ myStream;
+
+		OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog;
+
+		openFileDialog1->InitialDirectory = "c:\\";
+		openFileDialog1->Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+		openFileDialog1->FilterIndex = 2;
+		openFileDialog1->RestoreDirectory = true;
+
+		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+		{
+			textBox1->Text = System::IO::File::ReadAllText(openFileDialog1->FileName);
+			//textbox1_rich->Text = System::IO::File::ReadAllText(openFileDialog1->FileName);
+			if ((myStream = openFileDialog1->OpenFile()) != nullptr)
+			{
+				// Insert code to read the stream here.
+				myStream->Close();
+			}
+		}
+	}
+};
 }
