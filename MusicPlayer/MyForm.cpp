@@ -8,11 +8,8 @@
 #define WIN32_LEAN_AND_MEAN  
 #define _WIN32_WINNT _WIN32_WINNT_VISTA
 
-// SFML stuff
-#include "SFML/Audio.hpp"
+// SDL2 stuff
 
-#pragma comment(lib, "sfml-audio.lib")
-#pragma comment(lib, "sfml-system.lib")
 
 using namespace System;
 using namespace System::Windows::Forms;

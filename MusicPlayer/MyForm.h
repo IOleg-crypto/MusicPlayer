@@ -168,7 +168,6 @@ namespace MusicPlayer {
 
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		//sf::SoundBuffer buffer;
 	    String ^  path = textBox1->Text;
 		// Convert System::String^ to std::wstring
 		//#msclr::interop::marshal_context context;
