@@ -1,5 +1,18 @@
 #pragma once
 
+#define SDL_MAIN_HANDLED
+#include <string>
+#include <msclr/marshal.h>
+#include <msclr/marshal_cppstd.h>
+#include "mmstream.h"
+#include <string>
+#include <iostream>
+#include <msclr/marshal.h>
+//Windows stuff
+#include <Windows.h>
+#include <SDL.h>
+
+
 namespace MusicPlayer {
 
 	using namespace System;
@@ -11,6 +24,7 @@ namespace MusicPlayer {
 	using namespace System::Drawing::Text;
 	using namespace System::Media;
 	using namespace System::IO;
+	using namespace System::Runtime::InteropServices;
 
 	/// <summary>
 	/// Summary for MyForm
@@ -140,8 +154,8 @@ namespace MusicPlayer {
 			this->changeBackgroundImageToolStripMenuItem->Size = System::Drawing::Size(362, 26);
 			this->changeBackgroundImageToolStripMenuItem->Text = L"Change background image";
 			// 
-			// MyForm
 			// 
+			// MyForm
 			this->AutoScaleDimensions = System::Drawing::SizeF(120, 120);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Dpi;
 			this->ClientSize = System::Drawing::Size(768, 507);
@@ -158,11 +172,6 @@ namespace MusicPlayer {
 
 		}
 #pragma endregion
-    //Functions
-
-    
-
-	//
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 
@@ -170,17 +179,18 @@ namespace MusicPlayer {
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 	    String ^  path = textBox1->Text;
 		// Convert System::String^ to std::wstring
-		//#msclr::interop::marshal_context context;
-		//std::wstring wstr = context.marshal_as<std::wstring>(path);
+		msclr::interop::marshal_context context;
 
-		// Convert std::wstring to std::string
-		//std::string str(wstr.begin(), wstr.end());
+		// Convert to std::string
+		const char* cString = context.marshal_as<const char*>(path);
+		std::string cppString(cString);
+
 		//converting path
-		// 
-		// 
+		//
+	 
 		//To fix bug with button and exit of the program
 		if (textBox1->Text->Length == 0 ) {
-            MessageBox::Show("You didn`t choose a music file!", "Warning!", MessageBoxButtons::OK);
+            MessageBox::Show("You didn`t choose a music file!" , "Warning", MessageBoxButtons::OK,  MessageBoxIcon::Information);
 			
 		}
 		else

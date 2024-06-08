@@ -1,27 +1,26 @@
+#define SDL_MAIN_HANDLED
 #include "MyForm.h"
-#include "mmstream.h"
-//include <msclr/marshal.h>
-#include <string>
+#include <SDL.h>
 
-//Windows stuff
-#include <Windows.h>
-#define WIN32_LEAN_AND_MEAN  
-#define _WIN32_WINNT _WIN32_WINNT_VISTA
-
-// SDL2 stuff
-
-
+#undef main
 using namespace System;
 using namespace System::Windows::Forms;
-
-
+using namespace MusicPlayer;
 
 [STAThreadAttribute]
-int main(array<String^>^ args)
+
+int main(Platform::Array<Platform::String^>^ argv)
 {
 	Application::SetCompatibleTextRenderingDefault(false);
 	Application::EnableVisualStyles;
 	MusicPlayer::MyForm form;
-	Application::Run(% form);
+	Application::Run(gcnew MyForm());
+	if (SDL_Init( SDL_INIT_AUDIO) != 0) {
+		MessageBox::Show("SDL Initialization Failed", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		return 1;
+	}
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Hello", "Suc" , NULL);
+	return 0;
 
+	
 }

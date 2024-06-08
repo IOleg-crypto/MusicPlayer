@@ -74,19 +74,28 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\gitnext\MusicPlayer\MusicPlayer\SDL2-2.30.3;$(IncludePath)</IncludePath>
+    <IncludePath>D:\gitnext\Libraries\SDL2_mixer-2.8.0\include;D:\gitnext\Libraries\SDL2-2.30.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\gitnext\Libraries\SDL2-2.30.3\lib\x64;D:\gitnext\Libraries\SDL2_mixer-2.8.0\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>D:\gitnext\Libraries\SDL2_mixer-2.8.0\include;D:\gitnext\Libraries\SDL2-2.30.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\gitnext\Libraries\SDL2-2.30.3\lib\x64;D:\gitnext\Libraries\SDL2_mixer-2.8.0\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\gitnext\MusicPlayer\MusicPlayer\SDL2-2.30.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\gitnext\Libraries\SDL2_mixer-2.8.0\include;D:\gitnext\Libraries\SDL2-2.30.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>D:\gitnext\Libraries\SDL2_mixer-2.8.0\lib\x64;D:\gitnext\Libraries\SDL2-2.30.3\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
       <EntryPointSymbol>main</EntryPointSymbol>
-      <AdditionalLibraryDirectories>D:\gitnext\MusicPlayer\MusicPlayer\SDL2-2.30.3\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
@@ -99,6 +108,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies />
+      <AdditionalLibraryDirectories>D:\gitnext\MusicPlayer\MusicPlayer\SDL2-2.30.3\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -114,10 +124,21 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\gitnext\Libraries\SDL2_mixer-2.8.0\include;D:\gitnext\Libraries\SDL2-2.30.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>sfml-audio.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\gitnext\Libraries\SDL2_mixer-2.8.0\lib\x64;D:\gitnext\Libraries\SDL2-2.30.3\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="System" />
