@@ -35,6 +35,7 @@ namespace MusicPlayer {
 			//
 			//TODO: Add the constructor code here
 			//
+			
 		}
 
 	protected:
@@ -61,6 +62,7 @@ namespace MusicPlayer {
 
 	private: System::Windows::Forms::ToolStripMenuItem^ changeBackgroundImageToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ infoToolStripMenuItem;
+	private: System::Windows::Forms::BindingSource^ bindingSource1;
 
 	private: System::ComponentModel::IContainer^ components;
 
@@ -87,7 +89,9 @@ namespace MusicPlayer {
 			this->openFileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->changeBackgroundImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->infoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->bindingSource1 = (gcnew System::Windows::Forms::BindingSource(this->components));
 			this->menuStrip1->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// Play
@@ -98,6 +102,7 @@ namespace MusicPlayer {
 			this->Play->TabIndex = 1;
 			this->Play->Text = L"Play";
 			this->Play->UseVisualStyleBackColor = true;
+			this->Play->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom);
 			this->Play->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
 			// openFileDialog1
@@ -159,6 +164,10 @@ namespace MusicPlayer {
 			this->infoToolStripMenuItem->Text = L"Info";
 			this->infoToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::infoToolStripMenuItem_Click);
 			// 
+			// bindingSource1
+			// 
+			this->bindingSource1->CurrentChanged += gcnew System::EventHandler(this, &MyForm::bindingSource1_CurrentChanged);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(120, 120);
@@ -168,13 +177,14 @@ namespace MusicPlayer {
 			this->ClientSize = System::Drawing::Size(768, 507);
 			this->Controls->Add(this->menuStrip1);
 			this->Controls->Add(this->Play);
-			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MyForm";
 			this->Text = L"MusicPlayer";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
+			this->Resize += gcnew System::EventHandler(this, &MyForm::MyForm_Resize);
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -185,45 +195,27 @@ namespace MusicPlayer {
 
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		//String ^  path = textBox1->Text;
-		// Convert System::String^ to std::wstring
-		//msclr::interop::marshal_context context;
 
-		// Convert to std::string
-		//const char* cString = context.marshal_as<const char*>(path);
-		//std::string cppString(cString);
-
-		//converting path
-		//
-	 
-		//To fix bug with button and exit of the program
-		//if (textBox1->Text->Length == 0 ) {
-       //     MessageBox::Show("You didn`t choose a music file!" , "Warning", MessageBoxButtons::OK,  MessageBoxIcon::Information);
-			
-		//}
-		//else
-		//{
-			/*
-			sf::Sound sound;
-			sound.setBuffer(buffer);
-			sound.play();
-			*/
-		//}
+		SoundPlayer^ sound = gcnew SoundPlayer;
+		String^ filePath = openFileDialog1->FileName;
+		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+		     sound->SoundLocation = filePath;
+		     sound->Load();
+		     sound->Play();
+	    }
 	}
 	private: System::Void openFileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		Stream^ myStream;
 
 		OpenFileDialog^ openFileDialog1 = gcnew OpenFileDialog;
 
-		openFileDialog1->InitialDirectory = "c:\\";
-		openFileDialog1->Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-		openFileDialog1->FilterIndex = 2;
+		openFileDialog1->Filter = "Audio Files|*.mp3;*.wav;*.wma";
+	    openFileDialog1->Title = "Select a Music File";
 		openFileDialog1->RestoreDirectory = true;
 
 		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
-			//textBox1->Text = System::IO::File::ReadAllText(openFileDialog1->FileName);
-			//textbox1_rich->Text = System::IO::File::ReadAllText(openFileDialog1->FileName);
+			
 			if ((myStream = openFileDialog1->OpenFile()) != nullptr)
 			{
 				// Insert code to read the stream here.
@@ -266,6 +258,15 @@ private: System::Void changeBackgroundImageToolStripMenuItem_Click(System::Objec
 }
 private: System::Void infoToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 	MessageBox::Show("Music player had been made by i#Oleg 2024" , "Information", MessageBoxButtons::OK, MessageBoxIcon::Information);
+}
+private: System::Void bindingSource1_CurrentChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+public: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e) {
+	// Adjust the size of the button based on the form's new size.
+	this->Play->Size = Drawing::Size(this->ClientSize.Width / 6, this->ClientSize.Height / 10);
+
+	// Optionally, adjust the location of the button
+	//this->Play->Location = Point((this->ClientSize.Width - this->Play->Width) / 2, (this->ClientSize.Height - this->Play->Height) / 2);
 }
 };
 }
