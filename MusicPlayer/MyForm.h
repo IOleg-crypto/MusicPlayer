@@ -74,6 +74,7 @@ namespace MusicPlayer {
 
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::PictureBox^ pictureBox1;
 
 
 
@@ -105,8 +106,10 @@ namespace MusicPlayer {
 			this->bindingSource1 = (gcnew System::Windows::Forms::BindingSource(this->components));
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// Play
@@ -198,11 +201,20 @@ namespace MusicPlayer {
 			this->label1->Font = (gcnew System::Drawing::Font(L"Yu Gothic", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label1->ForeColor = System::Drawing::Color::White;
-			this->label1->Location = System::Drawing::Point(112, 55);
+			this->label1->Location = System::Drawing::Point(148, 64);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(119, 30);
 			this->label1->TabIndex = 6;
 			this->label1->Text = L"Unknown";
+			// 
+			// pictureBox1
+			// 
+			this->pictureBox1->Location = System::Drawing::Point(61, 55);
+			this->pictureBox1->Name = L"pictureBox1";
+			this->pictureBox1->Size = System::Drawing::Size(47, 39);
+			this->pictureBox1->TabIndex = 7;
+			this->pictureBox1->TabStop = false;
+			this->pictureBox1->Click += gcnew System::EventHandler(this, &MyForm::pictureBox1_Click);
 			// 
 			// MyForm
 			// 
@@ -211,6 +223,7 @@ namespace MusicPlayer {
 			this->AutoSize = true;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(768, 507);
+			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->menuStrip1);
@@ -223,6 +236,7 @@ namespace MusicPlayer {
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -272,6 +286,8 @@ namespace MusicPlayer {
 		{
 			String^ filePath = openFileDialog1->FileName;
 			this->label1->Text = filePath;
+			label1->Height = label1->Font->Height; 
+			label1->AutoEllipsis = true; 
 			if ((myStream = openFileDialog1->OpenFile()) != nullptr)
 			{
 				// Insert code to read the stream here.
@@ -289,6 +305,9 @@ private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) 
 	// Set the resized bitmap to the button's image
 	this->Play->Image = resizedBitmap;
 	this->Play->TextImageRelation = System::Windows::Forms::TextImageRelation::Overlay;
+
+	pictureBox1->Image = Image::FromFile("dynamic.png");
+	pictureBox1->SizeMode = PictureBoxSizeMode::Zoom;
 
 }
 private: System::Void menuStrip1_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
@@ -333,13 +352,14 @@ public: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e)
 	this->Play->Size = Drawing::Size(this->ClientSize.Width / 6, this->ClientSize.Height / 10);
 
 	// Optionally, adjust the location of the button
-	this->Play->Location = Point((this->ClientSize.Width - this->Play->Width) / 2, (this->ClientSize.Height - this->Play->Height) / 1);
+	this->Play->Location = Point((this->ClientSize.Width - this->Play->Width) / 2, (this->ClientSize.Height - this->Play->Height));
 
 	// Adjust the location
-	this->button1->Location= Point((this->ClientSize.Width - this->Play->Width) / 2, (this->ClientSize.Height - this->Play->Height) / 1);
+	this->button1->Location= Point((this->ClientSize.Width - this->Play->Width)/  6, (this->ClientSize.Height - this->Play->Height) / 1);
+	
 
 	// Optionally, adjust the size          
-	this->button1->Size = Drawing::Size(this->ClientSize.Width / 6 ,(this->ClientSize.Height - this->Play->Height) / 1);
+	this->button1->Size = Drawing::Size(this->ClientSize.Width / 6 ,(this->ClientSize.Height - this->Play->Height) / 10);
 }
 private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ e) {
 
@@ -347,6 +367,8 @@ private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ 
 private: System::Void button1_Click_1(System::Object^ sender, System::EventArgs^ e) {
 	MCI_GENERIC_PARMS mciGenericParms;
 	mciSendCommand(0, MCI_CLOSE, 0, (DWORD_PTR)&mciGenericParms);
+}
+private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }
