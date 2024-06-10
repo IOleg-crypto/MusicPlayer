@@ -9,6 +9,10 @@
 #include <msclr/marshal.h>
 //Windows stuff
 #include <Windows.h>
+#include <mmsystem.h>
+#include <string>
+
+#pragma comment(lib, "winmm.lib")
 
 namespace MusicPlayer {
 
@@ -22,6 +26,9 @@ namespace MusicPlayer {
 	using namespace System::Media;
 	using namespace System::IO;
 	using namespace System::Runtime::InteropServices;
+
+	using namespace AxWMPLib;
+	using namespace msclr::interop;
 
 	/// <summary>
 	/// Summary for MyForm
@@ -50,6 +57,7 @@ namespace MusicPlayer {
 			}
 		}
 	private: System::Windows::Forms::Button^ Play;
+
 	protected:
 
 	protected:
@@ -63,6 +71,11 @@ namespace MusicPlayer {
 	private: System::Windows::Forms::ToolStripMenuItem^ changeBackgroundImageToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ infoToolStripMenuItem;
 	private: System::Windows::Forms::BindingSource^ bindingSource1;
+
+	private: System::Windows::Forms::Button^ button1;
+	private: System::Windows::Forms::Label^ label1;
+
+
 
 	private: System::ComponentModel::IContainer^ components;
 
@@ -90,19 +103,19 @@ namespace MusicPlayer {
 			this->changeBackgroundImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->infoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->bindingSource1 = (gcnew System::Windows::Forms::BindingSource(this->components));
+			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// Play
 			// 
-			this->Play->Location = System::Drawing::Point(291, 423);
+			this->Play->Location = System::Drawing::Point(359, 439);
 			this->Play->Name = L"Play";
 			this->Play->Size = System::Drawing::Size(150, 56);
 			this->Play->TabIndex = 1;
-			this->Play->Text = L"Play";
 			this->Play->UseVisualStyleBackColor = true;
-			this->Play->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom);
 			this->Play->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
 			// openFileDialog1
@@ -168,6 +181,29 @@ namespace MusicPlayer {
 			// 
 			this->bindingSource1->CurrentChanged += gcnew System::EventHandler(this, &MyForm::bindingSource1_CurrentChanged);
 			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(163, 439);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(143, 56);
+			this->button1->TabIndex = 5;
+			this->button1->Text = L"Stop";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click_1);
+			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->BackColor = System::Drawing::Color::Transparent;
+			this->label1->Font = (gcnew System::Drawing::Font(L"Yu Gothic", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label1->ForeColor = System::Drawing::Color::White;
+			this->label1->Location = System::Drawing::Point(112, 55);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(119, 30);
+			this->label1->TabIndex = 6;
+			this->label1->Text = L"Unknown";
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(120, 120);
@@ -175,6 +211,8 @@ namespace MusicPlayer {
 			this->AutoSize = true;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(768, 507);
+			this->Controls->Add(this->label1);
+			this->Controls->Add(this->button1);
 			this->Controls->Add(this->menuStrip1);
 			this->Controls->Add(this->Play);
 			this->MainMenuStrip = this->menuStrip1;
@@ -196,13 +234,28 @@ namespace MusicPlayer {
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 
-		SoundPlayer^ sound = gcnew SoundPlayer;
-		String^ filePath = openFileDialog1->FileName;
-		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-		     sound->SoundLocation = filePath;
-		     sound->Load();
-		     sound->Play();
-	    }
+		System::String^ cliFilePath = label1->Text;
+		std::wstring filePath = marshal_as<std::wstring>(cliFilePath);
+
+		// Open the MP3 file
+		MCI_OPEN_PARMS mciOpenParms;
+		mciOpenParms.lpstrDeviceType = L"mpegvideo";
+		mciOpenParms.lpstrElementName = filePath.c_str();
+
+		if (mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD_PTR)&mciOpenParms))
+		{
+			MessageBox::Show("Failed to open the file.");
+			return;
+		}
+
+		// Play the MP3 file
+		MCI_PLAY_PARMS mciPlayParms;
+		if (mciSendCommand(mciOpenParms.wDeviceID, MCI_PLAY, 0, (DWORD_PTR)&mciPlayParms))
+		{
+			MessageBox::Show("Failed to play the file.");
+			mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, NULL);
+			return;
+		}
 	}
 	private: System::Void openFileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		Stream^ myStream;
@@ -213,9 +266,12 @@ namespace MusicPlayer {
 	    openFileDialog1->Title = "Select a Music File";
 		openFileDialog1->RestoreDirectory = true;
 
+		
+
 		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
-			
+			String^ filePath = openFileDialog1->FileName;
+			this->label1->Text = filePath;
 			if ((myStream = openFileDialog1->OpenFile()) != nullptr)
 			{
 				// Insert code to read the stream here.
@@ -224,6 +280,16 @@ namespace MusicPlayer {
 		}
 	}
 private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
+	//load icon for [play button]
+	// Load the icon and resize it
+	System::Drawing::Icon^ icon = gcnew System::Drawing::Icon("images.ico");
+	Bitmap^ originalBitmap = icon->ToBitmap();
+	Bitmap^ resizedBitmap = gcnew Bitmap(originalBitmap, System::Drawing::Size(32, 32)); // Change the size as needed
+
+	// Set the resized bitmap to the button's image
+	this->Play->Image = resizedBitmap;
+	this->Play->TextImageRelation = System::Windows::Forms::TextImageRelation::Overlay;
+
 }
 private: System::Void menuStrip1_ItemClicked(System::Object^ sender, System::Windows::Forms::ToolStripItemClickedEventArgs^ e) {
 }
@@ -262,11 +328,25 @@ private: System::Void infoToolStripMenuItem_Click(System::Object^ sender, System
 private: System::Void bindingSource1_CurrentChanged(System::Object^ sender, System::EventArgs^ e) {
 }
 public: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e) {
-	// Adjust the size of the button based on the form's new size.
+	
+// Adjust the size of the button based on the form's new size.
 	this->Play->Size = Drawing::Size(this->ClientSize.Width / 6, this->ClientSize.Height / 10);
 
 	// Optionally, adjust the location of the button
-	//this->Play->Location = Point((this->ClientSize.Width - this->Play->Width) / 2, (this->ClientSize.Height - this->Play->Height) / 2);
+	this->Play->Location = Point((this->ClientSize.Width - this->Play->Width) / 2, (this->ClientSize.Height - this->Play->Height) / 1);
+
+	// Adjust the location
+	this->button1->Location= Point((this->ClientSize.Width - this->Play->Width) / 2, (this->ClientSize.Height - this->Play->Height) / 1);
+
+	// Optionally, adjust the size          
+	this->button1->Size = Drawing::Size(this->ClientSize.Width / 6 ,(this->ClientSize.Height - this->Play->Height) / 1);
+}
+private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ e) {
+
+}
+private: System::Void button1_Click_1(System::Object^ sender, System::EventArgs^ e) {
+	MCI_GENERIC_PARMS mciGenericParms;
+	mciSendCommand(0, MCI_CLOSE, 0, (DWORD_PTR)&mciGenericParms);
 }
 };
 }
