@@ -76,6 +76,12 @@ namespace MusicPlayer {
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
 	private: UINT deviceID_music;
+	private: System::Windows::Forms::ToolStripMenuItem^ fontNameToolStripMenuItem;
+	private: System::Windows::Forms::FontDialog^ fontDialog1;
+	private: System::Windows::Forms::TrackBar^ trackBar1;
+	private: System::Windows::Forms::TrackBar^ trackBar2;
+	private: System::Windows::Forms::Timer^ timer1;
+	private: System::Windows::Forms::Timer^ timer2;
 
 
 
@@ -104,13 +110,20 @@ namespace MusicPlayer {
 			this->openFileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->changeBackgroundImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->infoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->fontNameToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->bindingSource1 = (gcnew System::Windows::Forms::BindingSource(this->components));
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
+			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
+			this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
+			this->trackBar2 = (gcnew System::Windows::Forms::TrackBar());
+			this->timer2 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// Play
@@ -135,9 +148,9 @@ namespace MusicPlayer {
 			// menuStrip1
 			// 
 			this->menuStrip1->ImageScalingSize = System::Drawing::Size(20, 20);
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
 				this->menuToolStripMenuItem,
-					this->infoToolStripMenuItem
+					this->infoToolStripMenuItem, this->fontNameToolStripMenuItem
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
@@ -181,6 +194,13 @@ namespace MusicPlayer {
 			this->infoToolStripMenuItem->Text = L"Info";
 			this->infoToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::infoToolStripMenuItem_Click);
 			// 
+			// fontNameToolStripMenuItem
+			// 
+			this->fontNameToolStripMenuItem->Name = L"fontNameToolStripMenuItem";
+			this->fontNameToolStripMenuItem->Size = System::Drawing::Size(93, 24);
+			this->fontNameToolStripMenuItem->Text = L"Font name";
+			this->fontNameToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::fontNameToolStripMenuItem_Click);
+			// 
 			// bindingSource1
 			// 
 			this->bindingSource1->CurrentChanged += gcnew System::EventHandler(this, &MyForm::bindingSource1_CurrentChanged);
@@ -191,12 +211,12 @@ namespace MusicPlayer {
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(143, 56);
 			this->button1->TabIndex = 5;
-			this->button1->Text = L"";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click_1);
 			// 
 			// label1
 			// 
+			this->label1->AutoEllipsis = true;
 			this->label1->AutoSize = true;
 			this->label1->BackColor = System::Drawing::Color::Transparent;
 			this->label1->Font = (gcnew System::Drawing::Font(L"Yu Gothic", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
@@ -207,7 +227,6 @@ namespace MusicPlayer {
 			this->label1->Size = System::Drawing::Size(119, 30);
 			this->label1->TabIndex = 6;
 			this->label1->Text = L"Unknown";
-			this->label1->AutoEllipsis = true;
 			// 
 			// pictureBox1
 			// 
@@ -218,6 +237,25 @@ namespace MusicPlayer {
 			this->pictureBox1->TabStop = false;
 			this->pictureBox1->Click += gcnew System::EventHandler(this, &MyForm::pictureBox1_Click);
 			// 
+			// trackBar1
+			// 
+			this->trackBar1->Location = System::Drawing::Point(-28, -52);
+			this->trackBar1->Name = L"trackBar1";
+			this->trackBar1->Size = System::Drawing::Size(104, 56);
+			this->trackBar1->TabIndex = 8;
+			// 
+			// trackBar2
+			// 
+			this->trackBar2->Location = System::Drawing::Point(41, 357);
+			this->trackBar2->Name = L"trackBar2";
+			this->trackBar2->Size = System::Drawing::Size(672, 56);
+			this->trackBar2->TabIndex = 9;
+			this->trackBar2->Scroll += gcnew System::EventHandler(this, &MyForm::trackBar2_Scroll);
+			// 
+			// timer2
+			// 
+			this->timer2->Tick += gcnew System::EventHandler(this, &MyForm::timer2_Tick);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(120, 120);
@@ -225,6 +263,8 @@ namespace MusicPlayer {
 			this->AutoSize = true;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(768, 507);
+			this->Controls->Add(this->trackBar2);
+			this->Controls->Add(this->trackBar1);
 			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button1);
@@ -239,6 +279,8 @@ namespace MusicPlayer {
 			this->menuStrip1->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -275,6 +317,15 @@ namespace MusicPlayer {
 			mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, NULL);
 			return;
 		}
+
+		// Get the length of the music file
+		MCI_STATUS_PARMS mciStatusParms;
+		mciStatusParms.dwItem = MCI_STATUS_LENGTH;
+		mciSendCommand(deviceID_music, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatusParms);
+		DWORD length = mciStatusParms.dwReturn;
+
+		// Set the maximum value of the track bar to the length of the music file
+		trackBar1->Maximum = length / 1000; // Convert milliseconds to seconds
 	}
 	private: System::Void openFileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		Stream^ myStream;
@@ -386,9 +437,46 @@ private: System::Void button1_Click_1(System::Object^ sender, System::EventArgs^
 		mciSendCommand(deviceID_music, MCI_STOP, 0, (DWORD_PTR)&mciGenericParms);
 		mciSendCommand(deviceID_music, MCI_CLOSE, 0, (DWORD_PTR)&mciGenericParms);
 		deviceID_music = 0; // Reset device ID after stopping
+		timer2->Stop();
 	}
 }
 private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void fontNameToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+	fontDialog1->ShowColor = true;
+
+	fontDialog1->Font = label1->Font;
+	fontDialog1->Color = label1->ForeColor;
+
+	if (fontDialog1->ShowDialog() != System::Windows::Forms::DialogResult::OK)
+	{
+		fontDialog1->Font = label1->Font;
+		fontDialog1->Color = label1->ForeColor;
+	}
+}
+private: System::Void timer2_Tick(System::Object^ sender, System::EventArgs^ e) {
+	if (deviceID_music != 0)
+	{
+		// Get the current position of the music file
+		MCI_STATUS_PARMS mciStatusParms;
+		mciStatusParms.dwItem = MCI_STATUS_POSITION;
+		mciSendCommand(deviceID_music, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatusParms);
+		DWORD position = mciStatusParms.dwReturn;
+
+		// Update the track bar to reflect the current position
+		trackBar1->Value = position / 1000; // Convert milliseconds to seconds
+	}
+}
+private: System::Void trackBar2_Scroll(System::Object^ sender, System::EventArgs^ e) {
+	if (deviceID_music != 0)
+	{
+		MCI_SEEK_PARMS mciSeekParms;
+		mciSeekParms.dwTo = trackBar1->Value * 1000; // Convert seconds to milliseconds
+		mciSendCommand(deviceID_music, MCI_SEEK, MCI_TO, (DWORD_PTR)&mciSeekParms);
+
+		MCI_PLAY_PARMS mciPlayParms;
+		mciSendCommand(deviceID_music, MCI_PLAY, 0, (DWORD_PTR)&mciPlayParms);
+	}
 }
 };
 }
