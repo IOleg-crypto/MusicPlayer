@@ -75,6 +75,7 @@ namespace MusicPlayer {
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
+	private: UINT deviceID_music;
 
 
 
@@ -190,7 +191,7 @@ namespace MusicPlayer {
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(143, 56);
 			this->button1->TabIndex = 5;
-			this->button1->Text = L"Stop";
+			this->button1->Text = L"";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click_1);
 			// 
@@ -206,6 +207,7 @@ namespace MusicPlayer {
 			this->label1->Size = System::Drawing::Size(119, 30);
 			this->label1->TabIndex = 6;
 			this->label1->Text = L"Unknown";
+			this->label1->AutoEllipsis = true;
 			// 
 			// pictureBox1
 			// 
@@ -262,6 +264,9 @@ namespace MusicPlayer {
 			return;
 		}
 
+		// Store the device ID
+		deviceID_music = mciOpenParms.wDeviceID;
+
 		// Play the MP3 file
 		MCI_PLAY_PARMS mciPlayParms;
 		if (mciSendCommand(mciOpenParms.wDeviceID, MCI_PLAY, 0, (DWORD_PTR)&mciPlayParms))
@@ -298,13 +303,23 @@ namespace MusicPlayer {
 private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
 	//load icon for [play button]
 	// Load the icon and resize it
-	System::Drawing::Icon^ icon = gcnew System::Drawing::Icon("images.ico");
-	Bitmap^ originalBitmap = icon->ToBitmap();
+	System::Drawing::Icon^ icon_play = gcnew System::Drawing::Icon("images.ico");
+	Bitmap^ originalBitmap = icon_play->ToBitmap();
 	Bitmap^ resizedBitmap = gcnew Bitmap(originalBitmap, System::Drawing::Size(32, 32)); // Change the size as needed
 
 	// Set the resized bitmap to the button's image
 	this->Play->Image = resizedBitmap;
 	this->Play->TextImageRelation = System::Windows::Forms::TextImageRelation::Overlay;
+
+	//icon for button , which is stop playing music
+
+	
+	System::Drawing::Icon^ icon_stop = gcnew System::Drawing::Icon("stopicon.ico");
+	Bitmap^ originalBitmap_stop = icon_stop->ToBitmap();
+	Bitmap^ resizedBitmap_stop = gcnew Bitmap(originalBitmap_stop, System::Drawing::Size(32, 32));
+	this->button1->Image = resizedBitmap_stop;
+	this->button1->TextImageRelation = System::Windows::Forms::TextImageRelation::Overlay;
+	
 
 	pictureBox1->Image = Image::FromFile("dynamic.png");
 	pictureBox1->SizeMode = PictureBoxSizeMode::Zoom;
@@ -365,8 +380,13 @@ private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ 
 
 }
 private: System::Void button1_Click_1(System::Object^ sender, System::EventArgs^ e) {
-	MCI_GENERIC_PARMS mciGenericParms;
-	mciSendCommand(0, MCI_CLOSE, 0, (DWORD_PTR)&mciGenericParms);
+	if (deviceID_music != 0)
+	{
+		MCI_GENERIC_PARMS mciGenericParms;
+		mciSendCommand(deviceID_music, MCI_STOP, 0, (DWORD_PTR)&mciGenericParms);
+		mciSendCommand(deviceID_music, MCI_CLOSE, 0, (DWORD_PTR)&mciGenericParms);
+		deviceID_music = 0; // Reset device ID after stopping
+	}
 }
 private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
