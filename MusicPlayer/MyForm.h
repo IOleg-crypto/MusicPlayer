@@ -6,11 +6,14 @@
 #include "mmstream.h"
 #include <string>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <msclr/marshal.h>
 //Windows stuff
 #include <Windows.h>
 #include <mmsystem.h>
 #include <string>
+
 
 #pragma comment(lib, "winmm.lib")
 
@@ -42,6 +45,7 @@ namespace MusicPlayer {
 			//
 			//TODO: Add the constructor code here
 			//
+			this->timer2->Start();
 			
 		}
 
@@ -75,13 +79,16 @@ namespace MusicPlayer {
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
-	private: UINT deviceID_music;
-	private: System::Windows::Forms::ToolStripMenuItem^ fontNameToolStripMenuItem;
+	private: UINT deviceID_music; //Checker
+	private: DWORD musicLength; // Store the length of the music
+
 	private: System::Windows::Forms::FontDialog^ fontDialog1;
 	private: System::Windows::Forms::TrackBar^ trackBar1;
 	private: System::Windows::Forms::TrackBar^ trackBar2;
 	private: System::Windows::Forms::Timer^ timer1;
 	private: System::Windows::Forms::Timer^ timer2;
+	private: System::Windows::Forms::Label^ label2;
+	private: System::Windows::Forms::Label^ label3;
 
 
 
@@ -91,6 +98,7 @@ namespace MusicPlayer {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
+		
 
 
 #pragma region Windows Form Designer generated code
@@ -110,7 +118,6 @@ namespace MusicPlayer {
 			this->openFileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->changeBackgroundImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->infoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->fontNameToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->bindingSource1 = (gcnew System::Windows::Forms::BindingSource(this->components));
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -119,6 +126,8 @@ namespace MusicPlayer {
 			this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
 			this->trackBar2 = (gcnew System::Windows::Forms::TrackBar());
 			this->timer2 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
@@ -148,9 +157,9 @@ namespace MusicPlayer {
 			// menuStrip1
 			// 
 			this->menuStrip1->ImageScalingSize = System::Drawing::Size(20, 20);
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
 				this->menuToolStripMenuItem,
-					this->infoToolStripMenuItem, this->fontNameToolStripMenuItem
+					this->infoToolStripMenuItem
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
@@ -193,13 +202,6 @@ namespace MusicPlayer {
 			this->infoToolStripMenuItem->Size = System::Drawing::Size(49, 24);
 			this->infoToolStripMenuItem->Text = L"Info";
 			this->infoToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::infoToolStripMenuItem_Click);
-			// 
-			// fontNameToolStripMenuItem
-			// 
-			this->fontNameToolStripMenuItem->Name = L"fontNameToolStripMenuItem";
-			this->fontNameToolStripMenuItem->Size = System::Drawing::Size(93, 24);
-			this->fontNameToolStripMenuItem->Text = L"Font name";
-			this->fontNameToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::fontNameToolStripMenuItem_Click);
 			// 
 			// bindingSource1
 			// 
@@ -246,15 +248,37 @@ namespace MusicPlayer {
 			// 
 			// trackBar2
 			// 
-			this->trackBar2->Location = System::Drawing::Point(41, 357);
+			this->trackBar2->Location = System::Drawing::Point(32, 322);
 			this->trackBar2->Name = L"trackBar2";
 			this->trackBar2->Size = System::Drawing::Size(672, 56);
-			this->trackBar2->TabIndex = 9;
+			this->trackBar2->SmallChange = 2;
+			this->trackBar2->TabIndex = 1000;
 			this->trackBar2->Scroll += gcnew System::EventHandler(this, &MyForm::trackBar2_Scroll);
 			// 
 			// timer2
 			// 
+			this->timer2->Interval = 1000;
 			this->timer2->Tick += gcnew System::EventHandler(this, &MyForm::timer2_Tick);
+			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->Location = System::Drawing::Point(32, 362);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(38, 16);
+			this->label2->TabIndex = 1001;
+			this->label2->Text = L"00:00";
+			this->label2->Click += gcnew System::EventHandler(this, &MyForm::label2_Click);
+			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->Location = System::Drawing::Point(659, 361);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(44, 16);
+			this->label3->TabIndex = 1002;
+			this->label3->Text = L"00:00";
+			this->label3->Click += gcnew System::EventHandler(this, &MyForm::label3_Click);
 			// 
 			// MyForm
 			// 
@@ -263,6 +287,8 @@ namespace MusicPlayer {
 			this->AutoSize = true;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(768, 507);
+			this->Controls->Add(this->label3);
+			this->Controls->Add(this->label2);
 			this->Controls->Add(this->trackBar2);
 			this->Controls->Add(this->trackBar1);
 			this->Controls->Add(this->pictureBox1);
@@ -286,10 +312,18 @@ namespace MusicPlayer {
 
 		}
 #pragma endregion
+		
+	
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
-
-
+	System::String^ formatTime(DWORD timeInMilliseconds)
+	{
+	   int seconds = (timeInMilliseconds / 1000) % 60;
+	   int minutes = (timeInMilliseconds / (1000 * 60)) % 60;
+	   std::wostringstream oss;
+	   oss << std::setfill(L'0') << std::setw(2) << minutes << L":" << std::setfill(L'0') << std::setw(2) << seconds;
+	   return gcnew System::String(oss.str().c_str());
+	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 
 		System::String^ cliFilePath = label1->Text;
@@ -322,10 +356,12 @@ namespace MusicPlayer {
 		MCI_STATUS_PARMS mciStatusParms;
 		mciStatusParms.dwItem = MCI_STATUS_LENGTH;
 		mciSendCommand(deviceID_music, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatusParms);
-		DWORD length = mciStatusParms.dwReturn;
+		musicLength = mciStatusParms.dwReturn;
 
 		// Set the maximum value of the track bar to the length of the music file
-		trackBar1->Maximum = length / 1000; // Convert milliseconds to seconds
+		trackBar1->Maximum = musicLength / 1000;// Convert milliseconds to seconds
+		label2->Text = formatTime(musicLength);
+
 	}
 	private: System::Void openFileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		Stream^ myStream;
@@ -354,6 +390,7 @@ namespace MusicPlayer {
 private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
 	//load icon for [play button]
 	// Load the icon and resize it
+
 	System::Drawing::Icon^ icon_play = gcnew System::Drawing::Icon("images.ico");
 	Bitmap^ originalBitmap = icon_play->ToBitmap();
 	Bitmap^ resizedBitmap = gcnew Bitmap(originalBitmap, System::Drawing::Size(32, 32)); // Change the size as needed
@@ -370,7 +407,6 @@ private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) 
 	Bitmap^ resizedBitmap_stop = gcnew Bitmap(originalBitmap_stop, System::Drawing::Size(32, 32));
 	this->button1->Image = resizedBitmap_stop;
 	this->button1->TextImageRelation = System::Windows::Forms::TextImageRelation::Overlay;
-	
 
 	pictureBox1->Image = Image::FromFile("dynamic.png");
 	pictureBox1->SizeMode = PictureBoxSizeMode::Zoom;
@@ -438,45 +474,46 @@ private: System::Void button1_Click_1(System::Object^ sender, System::EventArgs^
 		mciSendCommand(deviceID_music, MCI_CLOSE, 0, (DWORD_PTR)&mciGenericParms);
 		deviceID_music = 0; // Reset device ID after stopping
 		timer2->Stop();
+		trackBar1->Value = 0;
+		label3->Text = "00:00";
 	}
 }
 private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
-private: System::Void fontNameToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-	fontDialog1->ShowColor = true;
 
-	fontDialog1->Font = label1->Font;
-	fontDialog1->Color = label1->ForeColor;
-
-	if (fontDialog1->ShowDialog() != System::Windows::Forms::DialogResult::OK)
-	{
-		fontDialog1->Font = label1->Font;
-		fontDialog1->Color = label1->ForeColor;
-	}
-}
-private: System::Void timer2_Tick(System::Object^ sender, System::EventArgs^ e) {
+public: System::Void timer2_Tick(System::Object^ sender, System::EventArgs^ e) {
 	if (deviceID_music != 0)
 	{
-		// Get the current position of the music file
+		 // Get the current position of the music file
 		MCI_STATUS_PARMS mciStatusParms;
 		mciStatusParms.dwItem = MCI_STATUS_POSITION;
 		mciSendCommand(deviceID_music, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatusParms);
 		DWORD position = mciStatusParms.dwReturn;
 
 		// Update the track bar to reflect the current position
-		trackBar1->Value = position / 1000; // Convert milliseconds to seconds
+		//trackBar2->Value = position / 1000; // Convert milliseconds to seconds
+
+		trackBar2->Maximum = position / 1000; // Convert milliseconds to seconds
+
+		// Update the total time label
+		label2->Text = formatTime(musicLength);
 	}
 }
 private: System::Void trackBar2_Scroll(System::Object^ sender, System::EventArgs^ e) {
 	if (deviceID_music != 0)
 	{
 		MCI_SEEK_PARMS mciSeekParms;
-		mciSeekParms.dwTo = trackBar1->Value * 1000; // Convert seconds to milliseconds
+		mciSeekParms.dwTo = trackBar2->Value * 1000; // Convert seconds to milliseconds
 		mciSendCommand(deviceID_music, MCI_SEEK, MCI_TO, (DWORD_PTR)&mciSeekParms);
 
 		MCI_PLAY_PARMS mciPlayParms;
 		mciSendCommand(deviceID_music, MCI_PLAY, 0, (DWORD_PTR)&mciPlayParms);
 	}
 }
+private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 };
+
 }
