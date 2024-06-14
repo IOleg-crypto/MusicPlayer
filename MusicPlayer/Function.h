@@ -2,6 +2,7 @@
 #define FUNCTION_H
 
 #include "Library.h"
+#include "MyForm.h"
 
 System::String^ formatTime(DWORD timeInMilliseconds)
 {
@@ -11,5 +12,4 @@ System::String^ formatTime(DWORD timeInMilliseconds)
 	oss << std::setfill(L'0') << std::setw(2) << minutes << L":" << std::setfill(L'0') << std::setw(2) << seconds;
 	return gcnew System::String(oss.str().c_str());
 }
-
 #endif // FUNCTION_H

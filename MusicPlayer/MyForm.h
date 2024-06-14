@@ -1,6 +1,5 @@
 #pragma once
 
-
 //include headers
 #include "Library.h"
 #include "Function.h"
@@ -20,8 +19,6 @@ namespace MusicPlayer {
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
-			//
-			this->timer2->Start();
 			
 		}
 
@@ -55,19 +52,18 @@ namespace MusicPlayer {
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
-	private: UINT deviceID_music; //Checker
-	private: DWORD musicLength; // Store the length of the music
 
 	private: System::Windows::Forms::FontDialog^ fontDialog1;
 	private: System::Windows::Forms::TrackBar^ trackBar1;
 	private: System::Windows::Forms::TrackBar^ trackBar2;
 	private: System::Windows::Forms::Timer^ timer1;
 	private: System::Windows::Forms::Timer^ timer2;
-	private: System::Windows::Forms::Label^ label2;
-	private: System::Windows::Forms::Label^ label3;
+	public: System::Windows::Forms::Label^ currentTimeLabel;
+	public: System::Windows::Forms::Label^ totalTimeLabel;
 
-
-
+	public: UINT deviceID_music; //Checker
+	public: DWORD musicLength; // Store the length of the music
+	private: bool isButtonClicked;
 	private: System::ComponentModel::IContainer^ components;
 
 	private:
@@ -102,8 +98,8 @@ namespace MusicPlayer {
 			this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
 			this->trackBar2 = (gcnew System::Windows::Forms::TrackBar());
 			this->timer2 = (gcnew System::Windows::Forms::Timer(this->components));
-			this->label2 = (gcnew System::Windows::Forms::Label());
-			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->currentTimeLabel = (gcnew System::Windows::Forms::Label());
+			this->totalTimeLabel = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
@@ -238,23 +234,23 @@ namespace MusicPlayer {
 			// 
 			// label2
 			// 
-			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(32, 362);
-			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(38, 16);
-			this->label2->TabIndex = 1001;
-			this->label2->Text = L"00:00";
-			this->label2->Click += gcnew System::EventHandler(this, &MyForm::label2_Click);
+			this->currentTimeLabel->AutoSize = true;
+			this->currentTimeLabel->Location = System::Drawing::Point(32, 362);
+			this->currentTimeLabel->Name = L"label2";
+			this->currentTimeLabel->Size = System::Drawing::Size(38, 16);
+			this->currentTimeLabel->TabIndex = 1001;
+			this->currentTimeLabel->Text = L"00:00";
+			this->currentTimeLabel->Click += gcnew System::EventHandler(this, &MyForm::label2_Click);
 			// 
 			// label3
 			// 
-			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(659, 361);
-			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(44, 16);
-			this->label3->TabIndex = 1002;
-			this->label3->Text = L"00:00";
-			this->label3->Click += gcnew System::EventHandler(this, &MyForm::label3_Click);
+			this->totalTimeLabel->AutoSize = true;
+			this->totalTimeLabel->Location = System::Drawing::Point(659, 361);
+			this->totalTimeLabel->Name = L"label3";
+			this->totalTimeLabel->Size = System::Drawing::Size(44, 16);
+			this->totalTimeLabel->TabIndex = 1002;
+			this->totalTimeLabel->Text = L"00:00";
+			this->totalTimeLabel->Click += gcnew System::EventHandler(this, &MyForm::label3_Click);
 			// 
 			// MyForm
 			// 
@@ -263,8 +259,8 @@ namespace MusicPlayer {
 			this->AutoSize = true;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(768, 507);
-			this->Controls->Add(this->label3);
-			this->Controls->Add(this->label2);
+			this->Controls->Add(this->currentTimeLabel);
+			this->Controls->Add(this->totalTimeLabel);
 			this->Controls->Add(this->trackBar2);
 			this->Controls->Add(this->trackBar1);
 			this->Controls->Add(this->pictureBox1);
@@ -294,7 +290,12 @@ namespace MusicPlayer {
 	}
 	
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-
+			
+		//PlayMusic(label1, currentTimeLabel, deviceID_music, musicLength, trackBar2, isButtonClicked);
+		if (deviceID_music != 0 && isButtonClicked)
+		{
+			return; // Already playing
+		}
 		System::String^ cliFilePath = label1->Text;
 		std::wstring filePath = marshal_as<std::wstring>(cliFilePath);
 
@@ -329,8 +330,8 @@ namespace MusicPlayer {
 
 		// Set the maximum value of the track bar to the length of the music file
 		trackBar1->Maximum = musicLength / 1000;// Convert milliseconds to seconds
-		label2->Text = formatTime(musicLength);
-
+		currentTimeLabel->Text = formatTime(musicLength);
+		isButtonClicked = true;
 	}
 	private: System::Void openFileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		Stream^ myStream;
@@ -363,6 +364,7 @@ private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) 
 	System::Drawing::Icon^ icon_play = gcnew System::Drawing::Icon("images.ico");
 	Bitmap^ originalBitmap = icon_play->ToBitmap();
 	Bitmap^ resizedBitmap = gcnew Bitmap(originalBitmap, System::Drawing::Size(32, 32)); // Change the size as needed
+
 
 	// Set the resized bitmap to the button's image
 	this->Play->Image = resizedBitmap;
@@ -444,7 +446,8 @@ private: System::Void button1_Click_1(System::Object^ sender, System::EventArgs^
 		deviceID_music = 0; // Reset device ID after stopping
 		timer2->Stop();
 		trackBar1->Value = 0;
-		label3->Text = "00:00";
+		totalTimeLabel->Text = "00:00";
+		isButtonClicked = false;
 	}
 }
 private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -465,7 +468,7 @@ public: System::Void timer2_Tick(System::Object^ sender, System::EventArgs^ e) {
 		trackBar2->Maximum = position / 1000; // Convert milliseconds to seconds
 
 		// Update the total time label
-		label2->Text = formatTime(musicLength);
+		currentTimeLabel->Text = formatTime(musicLength);
 	}
 }
 private: System::Void trackBar2_Scroll(System::Object^ sender, System::EventArgs^ e) {
