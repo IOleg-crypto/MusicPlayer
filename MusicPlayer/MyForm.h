@@ -1,37 +1,13 @@
 #pragma once
 
-#include <string>
-#include <msclr/marshal.h>
-#include <msclr/marshal_cppstd.h>
-#include "mmstream.h"
-#include <string>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <msclr/marshal.h>
-//Windows stuff
-#include <Windows.h>
-#include <mmsystem.h>
-#include <string>
 
+//include headers
+#include "Library.h"
+#include "Function.h"
 
 #pragma comment(lib, "winmm.lib")
 
 namespace MusicPlayer {
-
-	using namespace System;
-	using namespace System::ComponentModel;
-	using namespace System::Collections;
-	using namespace System::Windows::Forms;
-	using namespace System::Data;
-	using namespace System::Drawing;
-	using namespace System::Drawing::Text;
-	using namespace System::Media;
-	using namespace System::IO;
-	using namespace System::Runtime::InteropServices;
-
-	using namespace AxWMPLib;
-	using namespace msclr::interop;
 
 	/// <summary>
 	/// Summary for MyForm
@@ -316,14 +292,7 @@ namespace MusicPlayer {
 	
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
-	System::String^ formatTime(DWORD timeInMilliseconds)
-	{
-	   int seconds = (timeInMilliseconds / 1000) % 60;
-	   int minutes = (timeInMilliseconds / (1000 * 60)) % 60;
-	   std::wostringstream oss;
-	   oss << std::setfill(L'0') << std::setw(2) << minutes << L":" << std::setfill(L'0') << std::setw(2) << seconds;
-	   return gcnew System::String(oss.str().c_str());
-	}
+	
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 
 		System::String^ cliFilePath = label1->Text;
