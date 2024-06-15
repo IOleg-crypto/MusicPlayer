@@ -282,11 +282,9 @@ namespace MusicPlayer {
 	
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 			
-		//PlayMusic(label1, currentTimeLabel, deviceID_music, musicLength, trackBar2, isButtonClicked);
-		if (deviceID_music != 0 && isButtonClicked)
-		{
-			return; // Already playing
-		}
+		//fix bug(when music playing you can play another music and it makes overlaping)
+		button1_Click_1(sender, e);
+
 		System::String^ cliFilePath = label1->Text;
 		std::wstring filePath = marshal_as<std::wstring>(cliFilePath);
 
@@ -427,6 +425,8 @@ public: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e)
 
 	// Optionally, adjust the size          
 	this->button1->Size = Drawing::Size(this->ClientSize.Width / 6 ,(this->ClientSize.Height - this->Play->Height) / 8);
+
+
 }
 private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ e) {
 
