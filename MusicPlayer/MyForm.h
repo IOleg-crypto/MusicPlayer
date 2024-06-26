@@ -64,6 +64,7 @@ namespace MusicPlayer {
 	public: UINT deviceID_music; //Checker
 	public: DWORD musicLength; // Store the length of the music
 	private: bool isButtonClicked;
+	private: System::Windows::Forms::Panel^ panel1;
 	private: System::ComponentModel::IContainer^ components;
 
 	private:
@@ -99,10 +100,12 @@ namespace MusicPlayer {
 			this->timer2 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->currentTimeLabel = (gcnew System::Windows::Forms::Label());
 			this->totalTimeLabel = (gcnew System::Windows::Forms::Label());
+			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->BeginInit();
+			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// Play
@@ -211,10 +214,10 @@ namespace MusicPlayer {
 			// 
 			// trackBar2
 			// 
-			this->trackBar2->Location = System::Drawing::Point(32, 322);
+			this->trackBar2->Location = System::Drawing::Point(12, 17);
 			this->trackBar2->Name = L"trackBar2";
 			this->trackBar2->RightToLeftLayout = true;
-			this->trackBar2->Size = System::Drawing::Size(672, 56);
+			this->trackBar2->Size = System::Drawing::Size(671, 56);
 			this->trackBar2->SmallChange = 2;
 			this->trackBar2->TabIndex = 1000;
 			this->trackBar2->TickStyle = System::Windows::Forms::TickStyle::Both;
@@ -228,7 +231,7 @@ namespace MusicPlayer {
 			// currentTimeLabel
 			// 
 			this->currentTimeLabel->AutoSize = true;
-			this->currentTimeLabel->Location = System::Drawing::Point(32, 362);
+			this->currentTimeLabel->Location = System::Drawing::Point(9, 76);
 			this->currentTimeLabel->Name = L"currentTimeLabel";
 			this->currentTimeLabel->Size = System::Drawing::Size(38, 16);
 			this->currentTimeLabel->TabIndex = 1001;
@@ -238,12 +241,23 @@ namespace MusicPlayer {
 			// totalTimeLabel
 			// 
 			this->totalTimeLabel->AutoSize = true;
-			this->totalTimeLabel->Location = System::Drawing::Point(659, 361);
+			this->totalTimeLabel->Location = System::Drawing::Point(645, 76);
 			this->totalTimeLabel->Name = L"totalTimeLabel";
 			this->totalTimeLabel->Size = System::Drawing::Size(38, 16);
 			this->totalTimeLabel->TabIndex = 1002;
 			this->totalTimeLabel->Text = L"00:00";
 			this->totalTimeLabel->Click += gcnew System::EventHandler(this, &MyForm::label3_Click);
+			// 
+			// panel1
+			// 
+			this->panel1->Controls->Add(this->trackBar2);
+			this->panel1->Controls->Add(this->totalTimeLabel);
+			this->panel1->Controls->Add(this->currentTimeLabel);
+			this->panel1->Location = System::Drawing::Point(36, 316);
+			this->panel1->Name = L"panel1";
+			this->panel1->Size = System::Drawing::Size(698, 99);
+			this->panel1->TabIndex = 1003;
+			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::panel1_Paint);
 			// 
 			// MyForm
 			// 
@@ -252,9 +266,7 @@ namespace MusicPlayer {
 			this->AutoSize = true;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(768, 507);
-			this->Controls->Add(this->currentTimeLabel);
-			this->Controls->Add(this->totalTimeLabel);
-			this->Controls->Add(this->trackBar2);
+			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button1);
@@ -270,6 +282,8 @@ namespace MusicPlayer {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->EndInit();
+			this->panel1->ResumeLayout(false);
+			this->panel1->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -420,8 +434,8 @@ public: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e)
 	// Adjust the location
 	this->button1->Location= Point((this->ClientSize.Width - this->Play->Width)/  6, (this->ClientSize.Height - this->Play->Height) / 1);
 
-	//this->trackBar2->Location = Point((this->ClientSize.Width - this->Play->Width) / 4, (this->ClientSize.Height - this->Play->Height) / 10);
-	//this->trackBar2->Size = Drawing::Size(this->ClientSize.Width / 6, this->ClientSize.Height / 10);
+	//this->panel1->Location = Point((this->ClientSize.Width - this->Play->Width) / 6, (this->ClientSize.Height - this->Play->Height) / 5);
+	//this->panel1->Size = Drawing::Size(this->ClientSize.Width / 0.1, this->ClientSize.Height / 10);
 
 	// Optionally, adjust the size          
 	this->button1->Size = Drawing::Size(this->ClientSize.Width / 6 ,(this->ClientSize.Height - this->Play->Height) / 8);
@@ -482,6 +496,8 @@ private: System::Void trackBar2_Scroll(System::Object^ sender, System::EventArgs
 private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 }
 };
 
