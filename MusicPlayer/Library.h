@@ -14,6 +14,7 @@
 #include <Windows.h>
 #include <mmsystem.h>
 #include <string>
+#include <sndfile.h>
 
 //Windows Forms Stuff
 using namespace System;
