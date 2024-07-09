@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include <iomanip>
 #include <msclr/marshal.h>
 //Windows stuff
@@ -16,6 +17,11 @@
 #include <string>
 #include <sndfile.h>
 #include <fftw3.h>
+#include <gdiplus.h>
+
+
+
+
 
 //Windows Forms Stuff
 using namespace System;

@@ -3,8 +3,10 @@
 //include headers
 #include "Library.h"
 #include "Function.h"
+#include "CustomWaveformControl.h"
 
 #pragma comment(lib, "winmm.lib")
+#pragma comment (lib,"Gdiplus.lib")
 
 namespace MusicPlayer {
 
@@ -19,6 +21,7 @@ namespace MusicPlayer {
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
+			//array<float>^ sampleData = gcnew array<float>{ 0.1f, 0.2f, 0.5f, -0.3f, -0.4f, 0.2f, 0.1f, 0.0f };
 			
 		}
 
