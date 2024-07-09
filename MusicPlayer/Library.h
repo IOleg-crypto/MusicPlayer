@@ -15,6 +15,7 @@
 #include <mmsystem.h>
 #include <string>
 #include <sndfile.h>
+#include <fftw3.h>
 
 //Windows Forms Stuff
 using namespace System;
@@ -26,9 +27,6 @@ using namespace System::Drawing;
 using namespace System::Drawing::Text;
 using namespace System::Media;
 using namespace System::IO;
-using namespace System::Runtime::InteropServices;
-
-using namespace AxWMPLib;
 using namespace msclr::interop;
 
 
