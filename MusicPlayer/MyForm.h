@@ -21,8 +21,7 @@ namespace MusicPlayer {
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
-			array<float>^ sampleData = gcnew array<float>{ 0.1f, 0.2f, 0.5f, -0.3f, -0.4f, 0.2f, 0.1f, 0.0f };
-			waveformControl->SetWaveformData(sampleData);
+			//array<float>^ sampleData = gcnew array<float>{ 0.1f, 0.2f, 0.5f, -0.3f, -0.4f, 0.2f, 0.1f, 0.0f };
 			
 		}
 
@@ -38,8 +37,11 @@ namespace MusicPlayer {
 			}
 		}
 	private: System::Windows::Forms::Button^ Play;
+<<<<<<< HEAD
 	private: CustomWaveformControl^ waveformControl;
 	private: System::ComponentModel::Container^ components;
+=======
+>>>>>>> parent of 85725a2 (Current wave invisible)
 
 	protected:
 
@@ -113,6 +115,7 @@ namespace MusicPlayer {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->BeginInit();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
+<<<<<<< HEAD
 			this->SuspendLayout();
 			//CustomControl
 			// 
@@ -125,6 +128,8 @@ namespace MusicPlayer {
 			 this->waveformControl->Size = System::Drawing::Size(300, 450);
 			 this->waveformControl->TabIndex = 0;
 			 this->waveformControl->Text = L"waveformControl";
+=======
+>>>>>>> parent of 85725a2 (Current wave invisible)
 			// 
 			// Play
 			// 
