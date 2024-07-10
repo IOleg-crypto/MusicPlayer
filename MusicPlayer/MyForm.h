@@ -39,6 +39,7 @@ namespace MusicPlayer {
 		}
 	private: System::Windows::Forms::Button^ Play;
 	private: CustomWaveformControl^ waveformControl;
+	private: System::ComponentModel::Container^ components;
 
 	protected:
 
@@ -112,10 +113,10 @@ namespace MusicPlayer {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->BeginInit();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
+			this->SuspendLayout();
 			//CustomControl
 			// 
-			 this->waveformControl = gcnew CustomWaveformControl();
-			 this->SuspendLayout();
+
 			 // 
 			 // waveformControl
 			 // 
@@ -289,12 +290,15 @@ namespace MusicPlayer {
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->menuStrip1);
 			this->Controls->Add(this->Play);
+			//this->Controls->Add(this->waveformControl);
+			//this->ResumeLayout(false);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MyForm";
 			this->Text = L"MusicPlayer";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->Resize += gcnew System::EventHandler(this, &MyForm::MyForm_Resize);
 			this->menuStrip1->ResumeLayout(false);
+			this->waveformControl->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
