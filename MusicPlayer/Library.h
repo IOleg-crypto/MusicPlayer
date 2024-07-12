@@ -15,8 +15,8 @@
 #include <Windows.h>
 #include <mmsystem.h>
 #include <string>
-#include <sndfile.h>
-#include <fftw3.h>
+//#include <sndfile.h>
+//#include <fftw3.h>
 #include <gdiplus.h>
 
 
