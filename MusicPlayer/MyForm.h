@@ -37,11 +37,6 @@ namespace MusicPlayer {
 			}
 		}
 	private: System::Windows::Forms::Button^ Play;
-<<<<<<< HEAD
-	private: CustomWaveformControl^ waveformControl;
-	private: System::ComponentModel::Container^ components;
-=======
->>>>>>> parent of 85725a2 (Current wave invisible)
 
 	protected:
 
@@ -68,14 +63,15 @@ namespace MusicPlayer {
 	private: System::Windows::Forms::Timer^ timer2;
 	public: System::Windows::Forms::Label^ currentTimeLabel;
 	public: System::Windows::Forms::Label^ totalTimeLabel;
-
+    
 	public: UINT deviceID_music; //Checker
 	public: DWORD musicLength; // Store the length of the music
+    public: System::String^ directory_path;
 	private: bool isButtonClicked;
+	private: DWORD currentPlaybackPosition;
 	private: System::Windows::Forms::Panel^ panel1;
 	private: System::ComponentModel::IContainer^ components;
 
-	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -114,22 +110,8 @@ namespace MusicPlayer {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->BeginInit();
 			this->panel1->SuspendLayout();
-			this->SuspendLayout();
-<<<<<<< HEAD
-			this->SuspendLayout();
-			//CustomControl
-			// 
 
-			 // 
-			 // waveformControl
-			 // 
-			 this->waveformControl->Location = System::Drawing::Point(350, 400);
-			 this->waveformControl->Name = L"waveformControl";
-			 this->waveformControl->Size = System::Drawing::Size(300, 450);
-			 this->waveformControl->TabIndex = 0;
-			 this->waveformControl->Text = L"waveformControl";
-=======
->>>>>>> parent of 85725a2 (Current wave invisible)
+			this->SuspendLayout();
 			// 
 			// Play
 			// 
@@ -198,6 +180,7 @@ namespace MusicPlayer {
 			this->infoToolStripMenuItem->Size = System::Drawing::Size(49, 24);
 			this->infoToolStripMenuItem->Text = L"Info";
 			this->infoToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::infoToolStripMenuItem_Click);
+
 			// 
 			// bindingSource1
 			// 
@@ -295,15 +278,12 @@ namespace MusicPlayer {
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->menuStrip1);
 			this->Controls->Add(this->Play);
-			//this->Controls->Add(this->waveformControl);
-			//this->ResumeLayout(false);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MyForm";
 			this->Text = L"MusicPlayer";
 			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->Resize += gcnew System::EventHandler(this, &MyForm::MyForm_Resize);
 			this->menuStrip1->ResumeLayout(false);
-			this->waveformControl->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
@@ -321,9 +301,17 @@ namespace MusicPlayer {
 	}
 	
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-			
-		//fix bug(when music playing you can play another music and it makes overlaping)
-		button1_Click_1(sender, e);
+		// Stop any currently playing music and store the current position
+		if (deviceID_music != 0) {
+			MCI_STATUS_PARMS mciStatusParms;
+			mciStatusParms.dwItem = MCI_STATUS_POSITION;
+			mciSendCommand(deviceID_music, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatusParms);
+			currentPlaybackPosition = mciStatusParms.dwReturn;
+
+			mciSendCommand(deviceID_music, MCI_STOP, 0, NULL);
+			mciSendCommand(deviceID_music, MCI_CLOSE, 0, NULL);
+			deviceID_music = 0;
+		}
 
 		System::String^ cliFilePath = label1->Text;
 		std::wstring filePath = marshal_as<std::wstring>(cliFilePath);
@@ -333,8 +321,7 @@ namespace MusicPlayer {
 		mciOpenParms.lpstrDeviceType = L"mpegvideo";
 		mciOpenParms.lpstrElementName = filePath.c_str();
 
-		if (mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD_PTR)&mciOpenParms))
-		{
+		if (mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD_PTR)&mciOpenParms)) {
 			MessageBox::Show("Failed to open the file.");
 			return;
 		}
@@ -342,27 +329,29 @@ namespace MusicPlayer {
 		// Store the device ID
 		deviceID_music = mciOpenParms.wDeviceID;
 
-		// Play the MP3 file
+		// Play the MP3 file from the stored position
 		MCI_PLAY_PARMS mciPlayParms;
-		if (mciSendCommand(mciOpenParms.wDeviceID, MCI_PLAY, 0, (DWORD_PTR)&mciPlayParms))
-		{
+		mciPlayParms.dwFrom = currentPlaybackPosition;
+		if (mciSendCommand(mciOpenParms.wDeviceID, MCI_PLAY, MCI_FROM, (DWORD_PTR)&mciPlayParms)) {
 			MessageBox::Show("Failed to play the file.");
 			mciSendCommand(mciOpenParms.wDeviceID, MCI_CLOSE, 0, NULL);
 			return;
 		}
 
 		// Get the length of the music file
-		MCI_STATUS_PARMS mciStatusParms;
-		mciStatusParms.dwItem = MCI_STATUS_LENGTH;
-		mciSendCommand(deviceID_music, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatusParms);
-		musicLength = mciStatusParms.dwReturn;
+		MCI_STATUS_PARMS mciStatusParmsLength;
+		mciStatusParmsLength.dwItem = MCI_STATUS_LENGTH;
+		mciSendCommand(deviceID_music, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatusParmsLength);
+		musicLength = mciStatusParmsLength.dwReturn;
 
 		// Set the maximum value of the track bar to the length of the music file
-		trackBar2->Maximum = musicLength / 1000;// Convert milliseconds to seconds
+		trackBar2->Maximum = musicLength / 1000; // Convert milliseconds to seconds
 		timer2->Start();
 		totalTimeLabel->Text = formatTime(musicLength);
 		isButtonClicked = true;
 	}
+
+
 	private: System::Void openFileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		Stream^ myStream;
 
@@ -370,14 +359,15 @@ namespace MusicPlayer {
 
 		openFileDialog1->Filter = "Audio Files|*.mp3;*.wav;*.wma";
 	    openFileDialog1->Title = "Select a Music File";
-		openFileDialog1->RestoreDirectory = true;
+		//openFileDialog1->RestoreDirectory = true;
+
 
 		
 
 		if (openFileDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		{
-			String^ filePath = openFileDialog1->FileName;
-			this->label1->Text = filePath;
+			directory_path = openFileDialog1->FileName;
+			this->label1->Text = directory_path;
 			label1->Height = label1->Font->Height; 
 			label1->AutoEllipsis = true; 
 			if ((myStream = openFileDialog1->OpenFile()) != nullptr)
@@ -451,21 +441,30 @@ private: System::Void bindingSource1_CurrentChanged(System::Object^ sender, Syst
 }
 public: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e) {
 	
-// Adjust the size of the button based on the form's new size.
+	// Resize the Play button and center it
 	this->Play->Size = Drawing::Size(this->ClientSize.Width / 6, this->ClientSize.Height / 10);
-
-	// Optionally, adjust the location of the button
 	this->Play->Location = Point((this->ClientSize.Width - this->Play->Width) / 2, (this->ClientSize.Height - this->Play->Height));
 
-	// Adjust the location
-	this->button1->Location= Point((this->ClientSize.Width - this->Play->Width)/  6, (this->ClientSize.Height - this->Play->Height) / 1);
+	// Resize and position button1
+	this->button1->Size = Drawing::Size(this->ClientSize.Width / 6, (this->ClientSize.Height - this->Play->Height) / 8);
+	this->button1->Location = Point((this->ClientSize.Width - this->Play->Width) / 6, (this->ClientSize.Height - this->Play->Height) / 1);
 
-	//this->panel1->Location = Point((this->ClientSize.Width - this->Play->Width) / 6, (this->ClientSize.Height - this->Play->Height) / 5);
-	//this->panel1->Size = Drawing::Size(this->ClientSize.Width / 0.1, this->ClientSize.Height / 10);
+	// Resize the panel to occupy the desired portion of the form
+	this->panel1->Size = Drawing::Size(this->ClientSize.Width / 2, this->ClientSize.Height / 6);
 
-	// Optionally, adjust the size          
-	this->button1->Size = Drawing::Size(this->ClientSize.Width / 6 ,(this->ClientSize.Height - this->Play->Height) / 8);
+	// Center the panel within the form and adjust its vertical position to be above the buttons
+	this->panel1->Location = Point((this->ClientSize.Width - this->panel1->Width) / 2, this->button1->Location.Y - this->panel1->Height - 20);
 
+	// Resize the trackbar to fit inside the panel
+	this->trackBar2->Size = Drawing::Size(this->panel1->Width - 20, this->panel1->Height / 3);
+	this->trackBar2->Location = Point((this->panel1->Width - this->trackBar2->Width) / 2, (this->panel1->Height - this->trackBar2->Height) / 2);
+
+	//resizing labels
+	currentTimeLabel->AutoSize = true;
+	currentTimeLabel->Location = Point(this->panel1->Width - currentTimeLabel->Width - 10, 10);
+
+	totalTimeLabel->Location = Point(10, 10); // Adjust as needed
+	this->panel1->Controls->Add(totalTimeLabel);
 
 }
 private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ e) {
@@ -475,13 +474,29 @@ private: System::Void button1_Click_1(System::Object^ sender, System::EventArgs^
 	if (deviceID_music != 0)
 	{
 		MCI_GENERIC_PARMS mciGenericParms;
+		// Stop the music playback without closing the device
 		mciSendCommand(deviceID_music, MCI_STOP, 0, (DWORD_PTR)&mciGenericParms);
-		mciSendCommand(deviceID_music, MCI_CLOSE, 0, (DWORD_PTR)&mciGenericParms);
-		deviceID_music = 0; // Reset device ID after stopping
+		// Keep the device open to retain the current playback position
+
+		// Stop the timer to halt any ongoing updates related to the playback
 		timer2->Stop();
-		//trackBar2->Value = 1000000000;
-		currentTimeLabel->Text = "00:00";
-		//isButtonClicked = false;
+
+		// Retrieve the current playback position
+		MCI_STATUS_PARMS mciStatusParms;
+		mciStatusParms.dwItem = MCI_STATUS_POSITION;
+		mciSendCommand(deviceID_music, MCI_STATUS, MCI_WAIT | MCI_STATUS_ITEM, (DWORD_PTR)&mciStatusParms);
+		DWORD currentPosition = mciStatusParms.dwReturn;
+
+		// Convert the current position from milliseconds to minutes and seconds
+		DWORD minutes = currentPosition / 60000; // Convert milliseconds to minutes
+		DWORD seconds = (currentPosition / 1000) % 60; // Convert milliseconds to seconds
+		currentTimeLabel->Text = String::Format("{0:D2}:{1:D2}", minutes, seconds);
+
+		// Optionally, update the trackBar2 value if it is linked to playback position
+		// trackBar2->Value = ...; // Set the value based on the current position
+
+		// Optionally, you can handle any other UI updates or state changes
+		// isButtonClicked = false; // if needed
 	}
 }
 private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
