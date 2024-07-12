@@ -15,16 +15,12 @@
 #include <Windows.h>
 #include <mmsystem.h>
 #include <string>
-<<<<<<< HEAD
 #include <sndfile.h>
 #include <fftw3.h>
 #include <gdiplus.h>
 
 
 
-
-=======
->>>>>>> parent of ea7d680 (added sndfile library)
 
 //Windows Forms Stuff
 using namespace System;

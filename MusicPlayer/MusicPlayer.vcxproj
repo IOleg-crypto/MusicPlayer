@@ -85,28 +85,17 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-<<<<<<< HEAD
       <AdditionalIncludeDirectories>D:\gitnext\MusicPlayer\MusicPlayer\fftw\include;D:\gitnext\MusicPlayer\MusicPlayer\libsndfile-1.2.2-win64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-=======
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
->>>>>>> parent of ea7d680 (added sndfile library)
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-<<<<<<< HEAD
       <AdditionalDependencies>sndfile.lib;Gdiplus.lib;libfftw3-3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
       <EntryPointSymbol>main</EntryPointSymbol>
       <AdditionalLibraryDirectories>D:\gitnext\MusicPlayer\MusicPlayer\libsndfile-1.2.2-win64\lib;D:\gitnext\MusicPlayer\MusicPlayer\fftw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-=======
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
-      <EntryPointSymbol>main</EntryPointSymbol>
->>>>>>> parent of ea7d680 (added sndfile library)
     </Link>
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
@@ -139,28 +128,17 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-<<<<<<< HEAD
       <AdditionalIncludeDirectories>D:\gitnext\MusicPlayer\MusicPlayer\fftw\include;D:\gitnext\MusicPlayer\MusicPlayer\libsndfile-1.2.2-win64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-=======
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
->>>>>>> parent of ea7d680 (added sndfile library)
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-<<<<<<< HEAD
       <AdditionalDependencies>sndfile.lib;Gdiplus.lib;libfftw3-3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-=======
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
->>>>>>> parent of ea7d680 (added sndfile library)
       <SubSystem>Windows</SubSystem>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
       <EntryPointSymbol>main</EntryPointSymbol>
-<<<<<<< HEAD
       <AdditionalLibraryDirectories>D:\gitnext\MusicPlayer\MusicPlayer\libsndfile-1.2.2-win64\lib;D:\gitnext\MusicPlayer\MusicPlayer\fftw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-=======
->>>>>>> parent of ea7d680 (added sndfile library)
     </Link>
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
