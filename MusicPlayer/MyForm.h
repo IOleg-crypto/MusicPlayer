@@ -441,30 +441,26 @@ private: System::Void bindingSource1_CurrentChanged(System::Object^ sender, Syst
 }
 public: System::Void MyForm_Resize(System::Object^ sender, System::EventArgs^ e) {
 	
-	// Resize the Play button and center it
+// Adjust the size of the button based on the form's new size.
 	this->Play->Size = Drawing::Size(this->ClientSize.Width / 6, this->ClientSize.Height / 10);
+
+	// Optionally, adjust the location of the button
 	this->Play->Location = Point((this->ClientSize.Width - this->Play->Width) / 2, (this->ClientSize.Height - this->Play->Height));
 
-	// Resize and position button1
-	this->button1->Size = Drawing::Size(this->ClientSize.Width / 6, (this->ClientSize.Height - this->Play->Height) / 8);
-	this->button1->Location = Point((this->ClientSize.Width - this->Play->Width) / 6, (this->ClientSize.Height - this->Play->Height) / 1);
+	// Adjust the location
+	this->button1->Location= Point((this->ClientSize.Width - this->Play->Width)/  6, (this->ClientSize.Height - this->Play->Height) / 1);
 
-	// Resize the panel to occupy the desired portion of the form
+	//TODO : need resize panel (with sliderbar inside panel)
+	// Correct the panel size to occupy the desired portion of the form.
 	this->panel1->Size = Drawing::Size(this->ClientSize.Width / 2, this->ClientSize.Height / 6);
 
-	// Center the panel within the form and adjust its vertical position to be above the buttons
-	this->panel1->Location = Point((this->ClientSize.Width - this->panel1->Width) / 2, this->button1->Location.Y - this->panel1->Height - 20);
+	// Center the panel within the form.
+	this->panel1->Location = Point((this->ClientSize.Width - this->panel1->Width) / 2, (this->ClientSize.Height - this->panel1->Height) / 2);
 
-	// Resize the trackbar to fit inside the panel
-	this->trackBar2->Size = Drawing::Size(this->panel1->Width - 20, this->panel1->Height / 3);
-	this->trackBar2->Location = Point((this->panel1->Width - this->trackBar2->Width) / 2, (this->panel1->Height - this->trackBar2->Height) / 2);
 
-	//resizing labels
-	currentTimeLabel->AutoSize = true;
-	currentTimeLabel->Location = Point(this->panel1->Width - currentTimeLabel->Width - 10, 10);
+	// Optionally, adjust the size          
+	this->button1->Size = Drawing::Size(this->ClientSize.Width / 6 ,(this->ClientSize.Height - this->Play->Height) / 8);
 
-	totalTimeLabel->Location = Point(10, 10); // Adjust as needed
-	this->panel1->Controls->Add(totalTimeLabel);
 
 }
 private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ e) {
