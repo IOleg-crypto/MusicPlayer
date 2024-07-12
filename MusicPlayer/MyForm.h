@@ -449,7 +449,7 @@ namespace MusicPlayer {
 		this->button1->Location = Point((this->ClientSize.Width - this->Play->Width) / 6, (this->ClientSize.Height - this->Play->Height) / 1);
 
 		// Resize the panel to occupy the desired portion of the form
-		this->panel1->Size = Drawing::Size(this->ClientSize.Width / 2, this->ClientSize.Height / 4);
+		this->panel1->Size = Drawing::Size(this->ClientSize.Width * 0.8, this->ClientSize.Height / 4);
 
 		// Center the panel within the form and adjust its vertical position to be above the buttons
 		this->panel1->Location = Point((this->ClientSize.Width - this->panel1->Width) / 2, this->button1->Location.Y - this->panel1->Height - 10);
