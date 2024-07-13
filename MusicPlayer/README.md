@@ -1,6 +1,6 @@
 # MusicPlayer Project
 
-A simple MusicPlayer application built using Visual Studio C++.
+A simple MusicPlayer application built using Visual Studio C++ WinForms.
 
 ## Features
 
