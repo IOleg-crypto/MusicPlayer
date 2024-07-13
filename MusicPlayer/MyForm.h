@@ -22,7 +22,7 @@ namespace MusicPlayer {
 			//
 			//TODO: Add the constructor code here
 			//array<float>^ sampleData = gcnew array<float>{ 0.1f, 0.2f, 0.5f, -0.3f, -0.4f, 0.2f, 0.1f, 0.0f };
-
+			InitializeEndpointVolume();  //initialize void(volume)
 		}
 
 	protected:
@@ -70,6 +70,8 @@ namespace MusicPlayer {
 	private: bool isButtonClicked;
 	private: DWORD currentPlaybackPosition;
 	private: System::Windows::Forms::Panel^ panel1;
+	private: System::DirectoryServices::DirectoryEntry^ directoryEntry1;
+	private: System::Windows::Forms::TrackBar^ trackBar1;
 	private: System::ComponentModel::IContainer^ components;
 
 		   /// <summary>
@@ -105,12 +107,14 @@ namespace MusicPlayer {
 			   this->currentTimeLabel = (gcnew System::Windows::Forms::Label());
 			   this->totalTimeLabel = (gcnew System::Windows::Forms::Label());
 			   this->panel1 = (gcnew System::Windows::Forms::Panel());
+			   this->directoryEntry1 = (gcnew System::DirectoryServices::DirectoryEntry());
+			   this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
 			   this->menuStrip1->SuspendLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->BeginInit();
 			   this->panel1->SuspendLayout();
-
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			   this->SuspendLayout();
 			   // 
 			   // Play
@@ -120,7 +124,7 @@ namespace MusicPlayer {
 			   this->Play->Size = System::Drawing::Size(150, 56);
 			   this->Play->TabIndex = 1;
 			   this->Play->UseVisualStyleBackColor = true;
-			   this->Play->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
+			   this->Play->Click += gcnew System::EventHandler(this, &MyForm::play_button);
 			   // 
 			   // openFileDialog1
 			   // 
@@ -142,7 +146,7 @@ namespace MusicPlayer {
 			   this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			   this->menuStrip1->Name = L"menuStrip1";
 			   this->menuStrip1->RenderMode = System::Windows::Forms::ToolStripRenderMode::Professional;
-			   this->menuStrip1->Size = System::Drawing::Size(768, 28);
+			   this->menuStrip1->Size = System::Drawing::Size(882, 28);
 			   this->menuStrip1->TabIndex = 3;
 			   this->menuStrip1->Text = L"menuStrip1";
 			   this->menuStrip1->ItemClicked += gcnew System::Windows::Forms::ToolStripItemClickedEventHandler(this, &MyForm::menuStrip1_ItemClicked);
@@ -180,7 +184,6 @@ namespace MusicPlayer {
 			   this->infoToolStripMenuItem->Size = System::Drawing::Size(49, 24);
 			   this->infoToolStripMenuItem->Text = L"Info";
 			   this->infoToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::infoToolStripMenuItem_Click);
-
 			   // 
 			   // bindingSource1
 			   // 
@@ -193,7 +196,7 @@ namespace MusicPlayer {
 			   this->button1->Size = System::Drawing::Size(143, 56);
 			   this->button1->TabIndex = 5;
 			   this->button1->UseVisualStyleBackColor = true;
-			   this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click_1);
+			   this->button1->Click += gcnew System::EventHandler(this, &MyForm::stop_button);
 			   // 
 			   // label1
 			   // 
@@ -223,7 +226,7 @@ namespace MusicPlayer {
 			   this->trackBar2->Location = System::Drawing::Point(12, 17);
 			   this->trackBar2->Name = L"trackBar2";
 			   this->trackBar2->RightToLeftLayout = true;
-			   this->trackBar2->Size = System::Drawing::Size(671, 56);
+			   this->trackBar2->Size = System::Drawing::Size(799, 56);
 			   this->trackBar2->SmallChange = 2;
 			   this->trackBar2->TabIndex = 1000;
 			   this->trackBar2->TickStyle = System::Windows::Forms::TickStyle::Both;
@@ -247,7 +250,7 @@ namespace MusicPlayer {
 			   // totalTimeLabel
 			   // 
 			   this->totalTimeLabel->AutoSize = true;
-			   this->totalTimeLabel->Location = System::Drawing::Point(645, 76);
+			   this->totalTimeLabel->Location = System::Drawing::Point(773, 76);
 			   this->totalTimeLabel->Name = L"totalTimeLabel";
 			   this->totalTimeLabel->Size = System::Drawing::Size(38, 16);
 			   this->totalTimeLabel->TabIndex = 1002;
@@ -261,9 +264,17 @@ namespace MusicPlayer {
 			   this->panel1->Controls->Add(this->currentTimeLabel);
 			   this->panel1->Location = System::Drawing::Point(36, 316);
 			   this->panel1->Name = L"panel1";
-			   this->panel1->Size = System::Drawing::Size(698, 99);
+			   this->panel1->Size = System::Drawing::Size(814, 99);
 			   this->panel1->TabIndex = 1003;
 			   this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::panel1_Paint);
+			   // 
+			   // trackBar1
+			   // 
+			   this->trackBar1->Location = System::Drawing::Point(578, 439);
+			   this->trackBar1->Name = L"trackBar1";
+			   this->trackBar1->Size = System::Drawing::Size(141, 56);
+			   this->trackBar1->TabIndex = 1004;
+			   this->trackBar1->Scroll += gcnew System::EventHandler(this, &MyForm::trackBar1_Scroll);
 			   // 
 			   // MyForm
 			   // 
@@ -271,7 +282,8 @@ namespace MusicPlayer {
 			   this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Dpi;
 			   this->AutoSize = true;
 			   this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			   this->ClientSize = System::Drawing::Size(768, 507);
+			   this->ClientSize = System::Drawing::Size(882, 553);
+			   this->Controls->Add(this->trackBar1);
 			   this->Controls->Add(this->panel1);
 			   this->Controls->Add(this->pictureBox1);
 			   this->Controls->Add(this->label1);
@@ -281,6 +293,7 @@ namespace MusicPlayer {
 			   this->MainMenuStrip = this->menuStrip1;
 			   this->Name = L"MyForm";
 			   this->Text = L"MusicPlayer";
+			   this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &MyForm::MyForm_FormClosed);
 			   this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			   this->Resize += gcnew System::EventHandler(this, &MyForm::MyForm_Resize);
 			   this->menuStrip1->ResumeLayout(false);
@@ -290,6 +303,7 @@ namespace MusicPlayer {
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->EndInit();
 			   this->panel1->ResumeLayout(false);
 			   this->panel1->PerformLayout();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();
 			   this->ResumeLayout(false);
 			   this->PerformLayout();
 
@@ -300,7 +314,7 @@ namespace MusicPlayer {
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 
-	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+	private: System::Void play_button(System::Object^ sender, System::EventArgs^ e) {
 		// Stop any currently playing music and store the current position
 		if (deviceID_music != 0) {
 			MCI_STATUS_PARMS mciStatusParms;
@@ -470,7 +484,7 @@ namespace MusicPlayer {
 private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ e) {
 
 }
-private: System::Void button1_Click_1(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void stop_button(System::Object^ sender, System::EventArgs^ e) {
 	if (deviceID_music != 0)
 	{
 		MCI_GENERIC_PARMS mciGenericParms;
@@ -539,6 +553,17 @@ private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e)
 private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+}
+private: System::Void trackBar1_Scroll(System::Object^ sender, System::EventArgs^ e) {
+	float volume = static_cast<float>(trackBar1->Value) / trackBar1->Maximum;
+	SetSystemVolume(volume);
+}
+private: System::Void MyForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+	if (pEndpointVolume != nullptr) {
+		pEndpointVolume->Release();
+		pEndpointVolume = nullptr;
+	}
+	CoUninitialize();
 }
 };
 

@@ -18,6 +18,10 @@
 //#include <sndfile.h>
 //#include <fftw3.h>
 #include <gdiplus.h>
+#include <endpointvolume.h> //set computer volume
+#include <mmdeviceapi.h>
+#include <vcclr.h>
+#include <stdexcept>
 
 
 
