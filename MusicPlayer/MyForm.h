@@ -327,6 +327,7 @@ namespace MusicPlayer {
 			deviceID_music = 0;
 		}
 
+
 		System::String^ cliFilePath = label1->Text;
 		std::wstring filePath = marshal_as<std::wstring>(cliFilePath);
 
