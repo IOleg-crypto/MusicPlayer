@@ -211,6 +211,7 @@ namespace MusicPlayer {
 			   this->label1->Size = System::Drawing::Size(119, 30);
 			   this->label1->TabIndex = 6;
 			   this->label1->Text = L"Unknown";
+			   this->label1->Click += gcnew System::EventHandler(this, &MyForm::label1_Click_2);
 			   // 
 			   // pictureBox1
 			   // 
@@ -270,9 +271,9 @@ namespace MusicPlayer {
 			   // 
 			   // trackBar1
 			   // 
-			   this->trackBar1->Location = System::Drawing::Point(578, 439);
+			   this->trackBar1->Location = System::Drawing::Point(575, 439);
 			   this->trackBar1->Name = L"trackBar1";
-			   this->trackBar1->Size = System::Drawing::Size(141, 56);
+			   this->trackBar1->Size = System::Drawing::Size(224, 56);
 			   this->trackBar1->TabIndex = 1004;
 			   this->trackBar1->Scroll += gcnew System::EventHandler(this, &MyForm::trackBar1_Scroll);
 			   // 
@@ -472,14 +473,27 @@ namespace MusicPlayer {
 		//trackbar resize
 		this->trackBar2->Size = Drawing::Size(this->panel1->Width - 20, this->panel1->Height / 3);
 		this->trackBar2->Location = Point((this->panel1->Width - this->trackBar2->Width) / 2, (this->panel1->Height - this->trackBar2->Height) / 2);
-		//labels
+		// Resize and position the volume trackBar1
+		this->trackBar1->Size = Drawing::Size(this->ClientSize.Width / 6, 45); // Adjust height as necessary
+		this->trackBar1->Location = Point(this->ClientSize.Width - this->trackBar1->Width - 170, this->Play->Location.Y - this->trackBar1->Height + 50);
+
+		// Adjust the positions of the labels within the panel
 		currentTimeLabel->AutoSize = true;
 		currentTimeLabel->Location = Point(10, 10); // Adjust as needed
 
-
 		totalTimeLabel->AutoSize = true;
 		totalTimeLabel->Location = Point(this->panel1->Width - totalTimeLabel->Width - 10, 10); // Adjust as needed
-		this->panel1->Controls->Add(totalTimeLabel);
+
+		// Ensure labels are added to the panel if they aren't already
+		if (!this->panel1->Controls->Contains(currentTimeLabel)) {
+			this->panel1->Controls->Add(currentTimeLabel);
+		}
+		if (!this->panel1->Controls->Contains(totalTimeLabel)) {
+			this->panel1->Controls->Add(totalTimeLabel);
+		}
+
+		// Optional: Ensure the panel is visible (if necessary)
+		this->panel1->Visible = true;
 
 	}
 private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ e) {
@@ -565,6 +579,8 @@ private: System::Void MyForm_FormClosed(System::Object^ sender, System::Windows:
 		pEndpointVolume = nullptr;
 	}
 	CoUninitialize();
+}
+private: System::Void label1_Click_2(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 
