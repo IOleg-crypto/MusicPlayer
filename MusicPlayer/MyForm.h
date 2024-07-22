@@ -54,7 +54,7 @@ namespace MusicPlayer {
 
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Label^ label1;
-	private: System::Windows::Forms::PictureBox^ pictureBox1;
+
 
 	private: System::Windows::Forms::FontDialog^ fontDialog1;
 		   //private: System::Windows::Forms::TrackBar^ trackBar1;
@@ -72,6 +72,9 @@ namespace MusicPlayer {
 	private: System::Windows::Forms::Panel^ panel1;
 	private: System::DirectoryServices::DirectoryEntry^ directoryEntry1;
 	private: System::Windows::Forms::TrackBar^ trackBar1;
+	private: System::Windows::Forms::DateTimePicker^ dateTimePicker1;
+	private: System::Windows::Forms::PictureBox^ pictureBox1;
+
 	private: System::ComponentModel::IContainer^ components;
 
 		   /// <summary>
@@ -100,7 +103,6 @@ namespace MusicPlayer {
 			   this->bindingSource1 = (gcnew System::Windows::Forms::BindingSource(this->components));
 			   this->button1 = (gcnew System::Windows::Forms::Button());
 			   this->label1 = (gcnew System::Windows::Forms::Label());
-			   this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			   this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
 			   this->trackBar2 = (gcnew System::Windows::Forms::TrackBar());
 			   this->timer2 = (gcnew System::Windows::Forms::Timer(this->components));
@@ -109,12 +111,14 @@ namespace MusicPlayer {
 			   this->panel1 = (gcnew System::Windows::Forms::Panel());
 			   this->directoryEntry1 = (gcnew System::DirectoryServices::DirectoryEntry());
 			   this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
+			   this->dateTimePicker1 = (gcnew System::Windows::Forms::DateTimePicker());
+			   this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			   this->menuStrip1->SuspendLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
-			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->BeginInit();
 			   this->panel1->SuspendLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			   this->SuspendLayout();
 			   // 
 			   // Play
@@ -206,21 +210,12 @@ namespace MusicPlayer {
 			   this->label1->Font = (gcnew System::Drawing::Font(L"Yu Gothic", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->label1->ForeColor = System::Drawing::Color::White;
-			   this->label1->Location = System::Drawing::Point(148, 64);
+			   this->label1->Location = System::Drawing::Point(187, 64);
 			   this->label1->Name = L"label1";
 			   this->label1->Size = System::Drawing::Size(119, 30);
 			   this->label1->TabIndex = 6;
 			   this->label1->Text = L"Unknown";
 			   this->label1->Click += gcnew System::EventHandler(this, &MyForm::label1_Click_2);
-			   // 
-			   // pictureBox1
-			   // 
-			   this->pictureBox1->Location = System::Drawing::Point(61, 55);
-			   this->pictureBox1->Name = L"pictureBox1";
-			   this->pictureBox1->Size = System::Drawing::Size(47, 39);
-			   this->pictureBox1->TabIndex = 7;
-			   this->pictureBox1->TabStop = false;
-			   this->pictureBox1->Click += gcnew System::EventHandler(this, &MyForm::pictureBox1_Click);
 			   // 
 			   // trackBar2
 			   // 
@@ -277,6 +272,24 @@ namespace MusicPlayer {
 			   this->trackBar1->TabIndex = 1004;
 			   this->trackBar1->Scroll += gcnew System::EventHandler(this, &MyForm::trackBar1_Scroll);
 			   // 
+			   // dateTimePicker1
+			   // 
+			   this->dateTimePicker1->Location = System::Drawing::Point(682, 31);
+			   this->dateTimePicker1->Name = L"dateTimePicker1";
+			   this->dateTimePicker1->Size = System::Drawing::Size(200, 22);
+			   this->dateTimePicker1->TabIndex = 1005;
+			   // 
+			   // pictureBox1
+			   // 
+			   this->pictureBox1->BackColor = System::Drawing::Color::Transparent;
+			   this->pictureBox1->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
+			   this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
+			   this->pictureBox1->Location = System::Drawing::Point(35, 41);
+			   this->pictureBox1->Name = L"pictureBox1";
+			   this->pictureBox1->Size = System::Drawing::Size(107, 93);
+			   this->pictureBox1->TabIndex = 1006;
+			   this->pictureBox1->TabStop = false;
+			   // 
 			   // MyForm
 			   // 
 			   this->AutoScaleDimensions = System::Drawing::SizeF(120, 120);
@@ -284,9 +297,10 @@ namespace MusicPlayer {
 			   this->AutoSize = true;
 			   this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			   this->ClientSize = System::Drawing::Size(882, 553);
+			   this->Controls->Add(this->pictureBox1);
+			   this->Controls->Add(this->dateTimePicker1);
 			   this->Controls->Add(this->trackBar1);
 			   this->Controls->Add(this->panel1);
-			   this->Controls->Add(this->pictureBox1);
 			   this->Controls->Add(this->label1);
 			   this->Controls->Add(this->button1);
 			   this->Controls->Add(this->menuStrip1);
@@ -300,11 +314,11 @@ namespace MusicPlayer {
 			   this->menuStrip1->ResumeLayout(false);
 			   this->menuStrip1->PerformLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->EndInit();
-			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->EndInit();
 			   this->panel1->ResumeLayout(false);
 			   this->panel1->PerformLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			   this->ResumeLayout(false);
 			   this->PerformLayout();
 
@@ -328,6 +342,8 @@ namespace MusicPlayer {
 			deviceID_music = 0;
 		}
 
+		Bitmap^ MyImage = gcnew Bitmap("assets/volume.png"); //replacing images when entered button
+		this->pictureBox1->Image = dynamic_cast<Image^>(MyImage);
 
 		System::String^ cliFilePath = label1->Text;
 		std::wstring filePath = marshal_as<std::wstring>(cliFilePath);
@@ -526,6 +542,8 @@ private: System::Void stop_button(System::Object^ sender, System::EventArgs^ e) 
 
 		// Optionally, you can handle any other UI updates or state changes
 		// isButtonClicked = false; // if needed
+		Bitmap ^MyImage = gcnew Bitmap("assets/mute.png"); //replacing images when entered button
+		this->pictureBox1->Image = dynamic_cast<Image^>(MyImage);
 	}
 }
 private: System::Void pictureBox1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -581,6 +599,8 @@ private: System::Void MyForm_FormClosed(System::Object^ sender, System::Windows:
 	CoUninitialize();
 }
 private: System::Void label1_Click_2(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void dateTimePicker1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 
