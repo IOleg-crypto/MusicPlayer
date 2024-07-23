@@ -74,6 +74,9 @@ namespace MusicPlayer {
 	private: System::Windows::Forms::TrackBar^ trackBar1;
 	private: System::Windows::Forms::DateTimePicker^ dateTimePicker1;
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
+	private: System::Windows::Forms::Panel^ panel2;
+	private: System::Windows::Forms::Label^ label3;
+	private: System::Windows::Forms::Label^ label2;
 
 	private: System::ComponentModel::IContainer^ components;
 
@@ -113,12 +116,16 @@ namespace MusicPlayer {
 			   this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
 			   this->dateTimePicker1 = (gcnew System::Windows::Forms::DateTimePicker());
 			   this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
+			   this->panel2 = (gcnew System::Windows::Forms::Panel());
+			   this->label3 = (gcnew System::Windows::Forms::Label());
+			   this->label2 = (gcnew System::Windows::Forms::Label());
 			   this->menuStrip1->SuspendLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->BeginInit();
 			   this->panel1->SuspendLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
+			   this->panel2->SuspendLayout();
 			   this->SuspendLayout();
 			   // 
 			   // Play
@@ -207,12 +214,12 @@ namespace MusicPlayer {
 			   this->label1->AutoEllipsis = true;
 			   this->label1->AutoSize = true;
 			   this->label1->BackColor = System::Drawing::Color::Transparent;
-			   this->label1->Font = (gcnew System::Drawing::Font(L"Yu Gothic", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
+			   this->label1->Font = (gcnew System::Drawing::Font(L"Yu Gothic", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(204)));
 			   this->label1->ForeColor = System::Drawing::Color::White;
-			   this->label1->Location = System::Drawing::Point(187, 64);
+			   this->label1->Location = System::Drawing::Point(165, 75);
 			   this->label1->Name = L"label1";
-			   this->label1->Size = System::Drawing::Size(119, 30);
+			   this->label1->Size = System::Drawing::Size(157, 39);
 			   this->label1->TabIndex = 6;
 			   this->label1->Text = L"Unknown";
 			   this->label1->Click += gcnew System::EventHandler(this, &MyForm::label1_Click_2);
@@ -266,9 +273,9 @@ namespace MusicPlayer {
 			   // 
 			   // trackBar1
 			   // 
-			   this->trackBar1->Location = System::Drawing::Point(575, 439);
+			   this->trackBar1->Location = System::Drawing::Point(3, 0);
 			   this->trackBar1->Name = L"trackBar1";
-			   this->trackBar1->Size = System::Drawing::Size(224, 56);
+			   this->trackBar1->Size = System::Drawing::Size(266, 56);
 			   this->trackBar1->TabIndex = 1004;
 			   this->trackBar1->Scroll += gcnew System::EventHandler(this, &MyForm::trackBar1_Scroll);
 			   // 
@@ -290,6 +297,34 @@ namespace MusicPlayer {
 			   this->pictureBox1->TabIndex = 1006;
 			   this->pictureBox1->TabStop = false;
 			   // 
+			   // panel2
+			   // 
+			   this->panel2->Controls->Add(this->label3);
+			   this->panel2->Controls->Add(this->label2);
+			   this->panel2->Controls->Add(this->trackBar1);
+			   this->panel2->Location = System::Drawing::Point(578, 439);
+			   this->panel2->Name = L"panel2";
+			   this->panel2->Size = System::Drawing::Size(269, 56);
+			   this->panel2->TabIndex = 1007;
+			   // 
+			   // label3
+			   // 
+			   this->label3->AutoSize = true;
+			   this->label3->Location = System::Drawing::Point(231, 37);
+			   this->label3->Name = L"label3";
+			   this->label3->Size = System::Drawing::Size(28, 16);
+			   this->label3->TabIndex = 1006;
+			   this->label3->Text = L"100";
+			   // 
+			   // label2
+			   // 
+			   this->label2->AutoSize = true;
+			   this->label2->Location = System::Drawing::Point(4, 37);
+			   this->label2->Name = L"label2";
+			   this->label2->Size = System::Drawing::Size(68, 16);
+			   this->label2->TabIndex = 1005;
+			   this->label2->Text = L"0(Volume)";
+			   // 
 			   // MyForm
 			   // 
 			   this->AutoScaleDimensions = System::Drawing::SizeF(120, 120);
@@ -297,9 +332,9 @@ namespace MusicPlayer {
 			   this->AutoSize = true;
 			   this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			   this->ClientSize = System::Drawing::Size(882, 553);
+			   this->Controls->Add(this->panel2);
 			   this->Controls->Add(this->pictureBox1);
 			   this->Controls->Add(this->dateTimePicker1);
-			   this->Controls->Add(this->trackBar1);
 			   this->Controls->Add(this->panel1);
 			   this->Controls->Add(this->label1);
 			   this->Controls->Add(this->button1);
@@ -319,6 +354,8 @@ namespace MusicPlayer {
 			   this->panel1->PerformLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
+			   this->panel2->ResumeLayout(false);
+			   this->panel2->PerformLayout();
 			   this->ResumeLayout(false);
 			   this->PerformLayout();
 
@@ -486,12 +523,9 @@ namespace MusicPlayer {
 		// Center the panel within the form and adjust its vertical position to be above the buttons
 		this->panel1->Location = Point((this->ClientSize.Width - this->panel1->Width) / 2, this->button1->Location.Y - this->panel1->Height - 10);
 
-		//trackbar resize
+		// TrackBar2 resize and position
 		this->trackBar2->Size = Drawing::Size(this->panel1->Width - 20, this->panel1->Height / 3);
 		this->trackBar2->Location = Point((this->panel1->Width - this->trackBar2->Width) / 2, (this->panel1->Height - this->trackBar2->Height) / 2);
-		// Resize and position the volume trackBar1
-		this->trackBar1->Size = Drawing::Size(this->ClientSize.Width / 6, 45); // Adjust height as necessary
-		this->trackBar1->Location = Point(this->ClientSize.Width - this->trackBar1->Width - 170, this->Play->Location.Y - this->trackBar1->Height + 50);
 
 		// Adjust the positions of the labels within the panel
 		currentTimeLabel->AutoSize = true;
@@ -508,10 +542,43 @@ namespace MusicPlayer {
 			this->panel1->Controls->Add(totalTimeLabel);
 		}
 
-		// Optional: Ensure the panel is visible (if necessary)
+		// Ensure the panel is visible (if necessary)
 		this->panel1->Visible = true;
 
+		// Resize and position panel2
+		this->panel2->Size = Drawing::Size(this->ClientSize.Width / 4, this->ClientSize.Height / 8);
+		this->panel2->Location = Point(this->ClientSize.Width - this->panel2->Width - 20, this->ClientSize.Height - this->panel2->Height - 20);
+
+		// Ensure panel2 is visible (if necessary)
+		this->panel2->Visible = true;
+
+		// Resize and position the volume trackBar1 within panel2
+		this->trackBar1->Size = Drawing::Size(this->panel2->Width - 20, 45); // Adjust height as necessary
+		this->trackBar1->Location = Point((this->panel2->Width - this->trackBar1->Width) / 2, (this->panel2->Height - this->trackBar1->Height) / 2);
+
+		// Ensure trackBar1 is added to panel2 if it isn't already
+		if (!this->panel2->Controls->Contains(trackBar1)) {
+			this->panel2->Controls->Add(trackBar1);
+		}
+
+		// Resize and position label2 within panel2
+		label2->AutoSize = true;
+		label2->Location = Point(10, 10); // Adjust as needed
+
+		// Resize and position label3 within panel2
+		label3->AutoSize = true;
+		label3->Location = Point(this->panel2->Width - label3->Width - 10, 10); // Adjust as needed
+
+		// Ensure labels are added to panel2 if they aren't already
+		if (!this->panel2->Controls->Contains(label2)) {
+			this->panel2->Controls->Add(label2);
+		}
+		if (!this->panel2->Controls->Contains(label3)) {
+			this->panel2->Controls->Add(label3);
+		}
 	}
+
+
 private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ e) {
 
 }
